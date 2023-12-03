@@ -23,7 +23,8 @@ namespace SqlCrudCreatorCore.BL
         private string _outputDir = "";
         private ReadOnlyCollection<DbColumn> _colData = null;
 
-        public SqlCrudCreator(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir)
+
+        public void CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir)
         {
             _databaseService = databaseService;
             _tableName = tableName;
@@ -34,11 +35,7 @@ namespace SqlCrudCreatorCore.BL
 
             _colData = DBTableHelper.ReadPropertiesFromTable(_tableName, _databaseService);
 
-        }
 
-        public void CreateAllClassObjAndSQL()
-        {
-           
             //create class objects
             CreateClassObjs();
 

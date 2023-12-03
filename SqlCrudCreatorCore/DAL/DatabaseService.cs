@@ -10,13 +10,15 @@ namespace SqlCrudCreatorCore.DAL
     {
         private string _connectionString = "";
         
-        public DatabaseService(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
 
+        private void GetConfigSettings()
+        {
+            _connectionString = "";
+        }
         public ReadOnlyCollection<DbColumn> ReadPropertiesFromTable(string tableName)
         {
+            GetConfigSettings();
+
             string strSQL = $"SELECT TOP 1 * FROM {tableName}";
 
             // Assumes connectionString is a valid connection string.  
