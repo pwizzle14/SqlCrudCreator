@@ -8,14 +8,11 @@ namespace SqlCrudCreatorCore.DAL
 {
     public class DatabaseService : IDatabaseService
     {
-
         private string _connectionString = "";
-        public DatabaseService()
-        {
-        }
-
+        
         public DatabaseService(string connectionString)
         {
+            _connectionString = connectionString;
         }
 
         public ReadOnlyCollection<DbColumn> ReadPropertiesFromTable(string tableName)
