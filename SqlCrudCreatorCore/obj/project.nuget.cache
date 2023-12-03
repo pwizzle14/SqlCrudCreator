@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eoH/IysyVy75jEYgZO1xnLteWgh1laGeQGjw0CxCRtKkpSgGPgthQrrYRZpQ4Gt2Yc2QUp4SBEOhXytGZjbgiA==",
+  "dgSpecHash": "z2ShLf3sgAaRtJIeG7wqDIlNGtpQRsMrnDOB47vDu6/VrQZPmRgV6KKFbmm7J3i2WvgW3m9BdnQADVwbETaQCQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ddavi\\source\\repos\\SQL_CRUD_CREATOR\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
+  "projectFilePath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ddavi\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\ddavi\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ddavi\\source\\repos\\SQL_CRUD_CREATOR\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj": {}
+    "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ddavi\\source\\repos\\SQL_CRUD_CREATOR\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj": {
+    "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ddavi\\source\\repos\\SQL_CRUD_CREATOR\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
+        "projectUniqueName": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
         "projectName": "SqlCrudCreatorCore",
-        "projectPath": "C:\\Users\\ddavi\\source\\repos\\SQL_CRUD_CREATOR\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
+        "projectPath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
         "packagesPath": "C:\\Users\\ddavi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ddavi\\source\\repos\\SQL_CRUD_CREATOR\\SqlCrudCreatorCore\\obj\\",
+        "outputPath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
