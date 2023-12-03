@@ -1,5 +1,6 @@
 ﻿using SqlCrudCreatorCore.CRUD_Templates.SQL;
 using SqlCrudCreatorCore.DAL;
+using SqlCrudCreatorCore.Service;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,18 +15,22 @@ namespace SqlCrudCreatorCore.BL
     {
 
         private IDatabaseService _databaseService = null;
+        private iFileWriter _fileWriter = null;
 
         private string _tableName = "";
         private string _objectName = "";
         private string _className = "";
+        private string _outputDir = "";
         private ReadOnlyCollection<DbColumn> _colData = null;
 
-        public SqlCrudCreator(IDatabaseService databaseService, string tableName, string objectName, string className)
+        public SqlCrudCreator(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir)
         {
             _databaseService = databaseService;
             _tableName = tableName;
             _objectName = objectName;
             _className = className;
+            _fileWriter = fileWriter;
+            _outputDir = outputDir;
 
             _colData = DBTableHelper.ReadPropertiesFromTable(_tableName, _databaseService);
 
@@ -56,43 +61,8 @@ namespace SqlCrudCreatorCore.BL
             result += gen.GetFetchByIdMethod();
             result += gen.GetCloseClass();
 
+            _fileWriter.WriteToText(result, _tableName, _outputDir, true);
 
-            CreateTextFile(result, _tableName, true);
-
-        }
-
-
-        private static void CreateTextFile(string text, string tableName, bool buildClass = false)
-        {
-
-            string directory = $@"C:\DomScriptCreator";
-            string filePath = string.Empty;
-
-            if (buildClass)
-            {
-                filePath = $@"{directory}\{tableName}.cs";
-            }
-            else
-            {
-                filePath = $@"{directory}\{tableName}_SQLScripts.sql";
-            }
-
-
-            //check for directory
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-
-            using (StreamWriter sw = File.CreateText(filePath))
-            {
-                sw.WriteLine(text);
-            }
         }
 
         private void CreateSqlScripts()
@@ -114,7 +84,7 @@ namespace SqlCrudCreatorCore.BL
                 sb.Append(temp.CreateSproc());
             }
 
-            CreateTextFile(sb.ToString(), _tableName);
+            _fileWriter.WriteToText(sb.ToString(),_tableName, _outputDir, false);
         }
     }
 }
