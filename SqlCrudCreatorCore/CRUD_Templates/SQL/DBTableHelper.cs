@@ -17,6 +17,7 @@ namespace SqlCrudCreatorCore
         public static ReadOnlyCollection<DbColumn> ReadPropertiesFromTable(string tableName, IDatabaseService databaseService)
         {
             _databaseService = databaseService;
+            _databaseService = databaseService;
 
             return _databaseService.ReadPropertiesFromTable(tableName);
         }
