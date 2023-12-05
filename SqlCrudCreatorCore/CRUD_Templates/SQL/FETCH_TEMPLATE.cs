@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SqlCrudCreatorCore
 {
-    public class Fetch_Template: TemplateBase, iTemplate
+    internal class Fetch_Template: TemplateBase, iTemplate
 	{
 		ReadOnlyCollection<DbColumn> _columData;
 		

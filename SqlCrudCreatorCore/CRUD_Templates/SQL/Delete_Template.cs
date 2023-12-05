@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SqlCrudCreatorCore
 {
-    public class Delete_Template: TemplateBase, iTemplate
+    internal class Delete_Template: TemplateBase, iTemplate
     {
 		public Delete_Template(ReadOnlyCollection<DbColumn> tableData, string tableName)
 		{

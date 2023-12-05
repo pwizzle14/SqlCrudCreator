@@ -1,5 +1,5 @@
 ﻿
-namespace SqlCrudCreatorCore.Service
+namespace SqlCrudCreatorCore.Services
 {
      public interface iFileWriter
     {

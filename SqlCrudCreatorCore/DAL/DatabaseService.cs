@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace SqlCrudCreatorCore.DAL
 {
-    public class DatabaseService : IDatabaseService
+    internal class DatabaseService : IDatabaseService
     {
         private string _connectionString = "";
         

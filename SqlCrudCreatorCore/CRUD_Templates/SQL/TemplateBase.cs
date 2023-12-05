@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SqlCrudCreatorCore
 {
-    public class TemplateBase
+    internal class TemplateBase
     {
         public const string LINE_BREAK = "\r\n";
         public const string TAB = "\t";
