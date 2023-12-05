@@ -2,6 +2,7 @@
 using SqlCrudCreatorCore.CRUD_Templates.SQL;
 using SqlCrudCreatorCore.DAL;
 using SqlCrudCreatorCore.Services;
+using SqlCrudCreatorCore.Utilites;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,21 +28,30 @@ namespace SqlCrudCreatorCore.BL
 
         public void CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, ILogger logger, string tableName, string objectName, string className, string outputDir)
         {
-            _databaseService = databaseService;
-            _tableName = tableName;
-            _objectName = objectName;
-            _className = className;
-            _fileWriter = fileWriter;
-            _outputDir = outputDir;
+            try
+            {
+                _databaseService = databaseService;
+                _tableName = tableName;
+                _objectName = objectName;
+                _className = className;
+                _fileWriter = fileWriter;
+                _outputDir = outputDir;
 
-            _colData = DBTableHelper.ReadPropertiesFromTable(_tableName, _databaseService);
+                _colData = DBTableHelper.ReadPropertiesFromTable(_tableName, _databaseService);
 
 
-            //create class objects
-            CreateClassObjs();
+                //create class objects
+                CreateClassObjs();
 
-            //CreateSQL Scripts
-            CreateSqlScripts();
+                //CreateSQL Scripts
+                CreateSqlScripts();
+
+            }
+
+            catch(Exception ex)
+            {
+                throw new SqlCrudCreatorExecption($"Fatal error!", ex);
+            }
         }
 
         private void CreateClassObjs()
