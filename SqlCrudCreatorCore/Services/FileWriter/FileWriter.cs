@@ -1,4 +1,4 @@
-﻿namespace SqlCrudCreatorCore.Service
+﻿namespace SqlCrudCreatorCore.Services
 {
     internal class FileWriter : iFileWriter
     {

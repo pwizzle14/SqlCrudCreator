@@ -1,6 +1,7 @@
-﻿using SqlCrudCreatorCore.CRUD_Templates.SQL;
+﻿using log4net.Core;
+using SqlCrudCreatorCore.CRUD_Templates.SQL;
 using SqlCrudCreatorCore.DAL;
-using SqlCrudCreatorCore.Service;
+using SqlCrudCreatorCore.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace SqlCrudCreatorCore.BL
         private ReadOnlyCollection<DbColumn> _colData = null;
 
 
-        public void CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir)
+        public void CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, ILogger logger, string tableName, string objectName, string className, string outputDir)
         {
             _databaseService = databaseService;
             _tableName = tableName;

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SqlCrudCreatorCore
 {
-    public class Update_Template: TemplateBase, iTemplate
+    internal class Update_Template: TemplateBase, iTemplate
 	{
 		public Update_Template(ReadOnlyCollection<DbColumn> tableData, string tableName)
 		{

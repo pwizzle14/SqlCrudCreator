@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SqlCrudCreatorCore
 {
-    public class ClassGenerator
+    internal class ClassGenerator
     {
 
         public static string[] StringDBTypes = new string[] { "nvarchar", "varchar" };

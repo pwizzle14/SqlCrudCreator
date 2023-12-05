@@ -10,7 +10,7 @@ using SqlCrudCreatorCore.DAL;
 
 namespace SqlCrudCreatorCore
 {
-    public class DBTableHelper
+    internal class DBTableHelper
     {
         private static IDatabaseService _databaseService = null;  
 
