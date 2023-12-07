@@ -4,11 +4,11 @@ using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Text;
 using System.Linq;
-
+using SqlCrudCreatorCore.DAL;
 
 namespace SqlCrudCreatorCore
 {
-    internal class TemplateBase
+    public class TemplateBase
     {
         public const string LINE_BREAK = "\r\n";
         public const string TAB = "\t";
@@ -17,9 +17,24 @@ namespace SqlCrudCreatorCore
         public string Parameters = "";
         public string TableName = "";
         public string PrimaryKey = "";
-        public ReadOnlyCollection<DbColumn> ColumData;
+        public List<DataTableProperties> ColumData;
         public List<string> LstColumnNames = new List<string>();
 
+        public TemplateBase(List<DataTableProperties> tableData, string tableName)
+        {
+            ColumData = tableData;
+
+            ColumNames = CreateColumnNames(ColumData);
+            
+            TableName = tableName;
+            Parameters = CreateParameters(ColumData, false);
+            PrimaryKey = ColumData.FirstOrDefault(x => x.IsIdentity == true).ColumnName;
+        }
+
+        private string GetSprocName(string tableName)
+        {
+            return "DEFAULT_SPROC_NAME";
+        }
 
         public string SetNoCount
         {
@@ -57,7 +72,7 @@ namespace SqlCrudCreatorCore
             }
         }
 
-        public string CreateColumnNames(ReadOnlyCollection<DbColumn> colData,bool excludePk = false )
+        public string CreateColumnNames(List<DataTableProperties> colData,bool excludePk = false )
         {
             StringBuilder stb = new StringBuilder();
             var res = colData.ToList();
@@ -79,7 +94,7 @@ namespace SqlCrudCreatorCore
             return stb.ToString();
         }
 
-        public string CreateParameters(ReadOnlyCollection<DbColumn> colData, bool primaryKeyOnly = false, bool excludePk = false)
+        public string CreateParameters(List<DataTableProperties> colData, bool primaryKeyOnly = false, bool excludePk = false)
         {
             var res = colData.ToList();
 
@@ -95,7 +110,7 @@ namespace SqlCrudCreatorCore
 
             return CreateParameters(res);
         }
-        private string CreateParameters(List<DbColumn> colData)
+        private string CreateParameters(List<DataTableProperties> colData)
         {
 
             StringBuilder stb = new StringBuilder();
@@ -143,7 +158,7 @@ namespace SqlCrudCreatorCore
 
             foreach (var col in ColumData)
             {
-                if (!col.IsIdentity.Value)
+                if (!col.IsIdentity)
                 {
                     stb.Append($",{col.ColumnName} = @{col.ColumnName}{LINE_BREAK}");
                 }

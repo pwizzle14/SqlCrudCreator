@@ -1,14 +1,10 @@
 ﻿using log4net.Core;
 using log4net.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SqlCrudCreatorCore.Services
 {
-    internal class ConsoleLogger : ILogger
+    public class ConsoleLogger : ILogger
     {
         public string Name => throw new NotImplementedException();
 

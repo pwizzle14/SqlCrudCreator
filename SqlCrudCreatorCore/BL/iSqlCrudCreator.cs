@@ -9,6 +9,6 @@ namespace SqlCrudCreatorCore.BL
 {
     public interface iSqlCrudCreator
     {
-        void CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter,  ILogger logger, string tableName, string objectName, string className, string outputDir);
+        SqlCrudCreatorResults CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir);
     }
 }

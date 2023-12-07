@@ -1,27 +1,17 @@
 ﻿using SqlCrudCreatorCore.CRUD_Templates.SQL;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
+using SqlCrudCreatorCore.DAL;
+
 
 namespace SqlCrudCreatorCore
 {
-    internal class Delete_Template: TemplateBase, iTemplate
+    public class Delete_Template: TemplateBase, iTemplate
     {
-		public Delete_Template(ReadOnlyCollection<DbColumn> tableData, string tableName)
+		public Delete_Template(List<DataTableProperties> tableData, string tableName): base(tableData,tableName)
 		{
-			ColumData = tableData;
-
-			ColumNames = CreateColumnNames(ColumData);
 			SprocName = GetSprocName(tableName);
-			TableName = tableName;
-			Parameters = CreateParameters(ColumData, true);
-			PrimaryKey = ColumData.Where(x => x.IsIdentity == true).FirstOrDefault().ColumnName;
 		}
 
-		public string CreateSproc()
+        public string CreateSproc()
 		{
 			var text = $"{ BeginningOfSprocText}{ LINE_BREAK}" +
 				$"{Parameters}" +
@@ -34,7 +24,7 @@ namespace SqlCrudCreatorCore
 			return text;
 		}
 
-		public static string GetSprocName(string tableName)
+		public string GetSprocName(string tableName)
         {
 			return $"{tableName}_Delete";
 

@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using SqlCrudCreatorCore.Utilites;
 
+
 namespace SqlCrudCreatorCore.DAL
 {
-    internal class DatabaseService : IDatabaseService
+    public partial class DatabaseService : IDatabaseService
     {
         private string _connectionString = "";
         
-
         private void GetConfigSettings()
         {
-            _connectionString = "";
+            _connectionString = "server=Doms-Laptop;initial catalog=Goldenvale;trusted_connection=true";
         }
-        public ReadOnlyCollection<DbColumn> ReadPropertiesFromTable(string tableName)
+        public DataTable GetTableInfo(string tableName)
         {
             try
             {
@@ -32,7 +29,8 @@ namespace SqlCrudCreatorCore.DAL
 
                     connection.Open();
                     var reader = command.ExecuteReader();
-                    var dt = reader.GetColumnSchema();
+                    var dt = reader.GetSchemaTable();
+                    //return dt;
 
                     return dt;
                 }
@@ -43,5 +41,7 @@ namespace SqlCrudCreatorCore.DAL
                 throw new SqlCrudCreatorExecption($"Error Fetching data from table {tableName}", ex);
             }
         }
+
+       
     }
 }
