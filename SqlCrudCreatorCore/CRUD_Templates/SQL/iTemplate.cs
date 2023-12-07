@@ -7,6 +7,7 @@ namespace SqlCrudCreatorCore.CRUD_Templates.SQL
     public interface iTemplate
     {
         public string CreateSproc();
+        public  string GetSprocName(string tableName);
 
     }
 }

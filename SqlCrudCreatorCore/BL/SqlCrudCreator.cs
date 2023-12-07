@@ -3,12 +3,7 @@ using SqlCrudCreatorCore.CRUD_Templates.SQL;
 using SqlCrudCreatorCore.DAL;
 using SqlCrudCreatorCore.Services;
 using SqlCrudCreatorCore.Utilites;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.IO;
 using System.Text;
 
 namespace SqlCrudCreatorCore.BL
@@ -23,13 +18,15 @@ namespace SqlCrudCreatorCore.BL
         private string _objectName = "";
         private string _className = "";
         private string _outputDir = "";
-        private ReadOnlyCollection<DbColumn> _colData = null;
+        private List<DataTableProperties> _colData = null;
+        private SqlCrudCreatorResults _results = new SqlCrudCreatorResults();
 
 
-        public void CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, ILogger logger, string tableName, string objectName, string className, string outputDir)
+        public SqlCrudCreatorResults CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir)
         {
             try
             {
+              
                 _databaseService = databaseService;
                 _tableName = tableName;
                 _objectName = objectName;
@@ -41,10 +38,12 @@ namespace SqlCrudCreatorCore.BL
 
 
                 //create class objects
-                CreateClassObjs();
+                _results.ClassObjects = CreateClassObjs();
 
                 //CreateSQL Scripts
-                CreateSqlScripts();
+                _results.SqlQuries = CreateSqlScripts();
+
+                return _results;
 
             }
 
@@ -54,7 +53,7 @@ namespace SqlCrudCreatorCore.BL
             }
         }
 
-        private void CreateClassObjs()
+        private string CreateClassObjs()
         {
             ClassGenerator gen = new ClassGenerator(_colData, _tableName, _className, _objectName);
 
@@ -69,16 +68,17 @@ namespace SqlCrudCreatorCore.BL
             result += gen.GetFetchByIdMethod();
             result += gen.GetCloseClass();
 
-            _fileWriter.WriteToText(result, _tableName, _outputDir, true);
 
+            return result;
         }
 
-        private void CreateSqlScripts()
+        private string CreateSqlScripts()
         {
             StringBuilder sb = new StringBuilder();
           
-            var lstOfTemplates = new ArrayList();
+            var lstOfTemplates = new List<iTemplate>();
 
+            
             lstOfTemplates.Add(new Fetch_Template(_colData, _tableName));
             lstOfTemplates.Add(new Insert_Template(_colData, _tableName));
             lstOfTemplates.Add(new Delete_Template(_colData, _tableName));
@@ -87,12 +87,12 @@ namespace SqlCrudCreatorCore.BL
 
             foreach (var template in lstOfTemplates)
             {
-                iTemplate temp = (iTemplate)template;
+                iTemplate temp = template;
 
                 sb.Append(temp.CreateSproc());
             }
 
-            _fileWriter.WriteToText(sb.ToString(),_tableName, _outputDir, false);
+            return sb.ToString();
         }
     }
 }

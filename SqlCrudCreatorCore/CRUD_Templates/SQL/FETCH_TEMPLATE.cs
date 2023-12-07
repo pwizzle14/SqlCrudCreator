@@ -1,27 +1,15 @@
 ﻿using SqlCrudCreatorCore.CRUD_Templates.SQL;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
+using SqlCrudCreatorCore.DAL;
+
 
 namespace SqlCrudCreatorCore
 {
-    internal class Fetch_Template: TemplateBase, iTemplate
+    public class Fetch_Template: TemplateBase, iTemplate
 	{
-		ReadOnlyCollection<DbColumn> _columData;
 		
-		
-		public Fetch_Template(ReadOnlyCollection<DbColumn> tableData, string tableName)
+		public Fetch_Template(List<DataTableProperties> tableData, string tableName): base(tableData, tableName)
         {
-			_columData = tableData;
-
-			ColumNames = CreateColumnNames(_columData);
 			SprocName = GetSprocName(tableName);
-			TableName = tableName;
-			Parameters = CreateParameters(_columData, true);
-			PrimaryKey = _columData.Where(x => x.IsIdentity == true).FirstOrDefault().ColumnName;
 		}
 
         public string CreateSproc()
@@ -53,7 +41,7 @@ namespace SqlCrudCreatorCore
 
 		}
 
-		public static string GetSprocName(string tableName)
+		public string GetSprocName(string tableName)
         {
 			return $"{tableName}_Fetch";
 		}

@@ -1,24 +1,14 @@
 ﻿using SqlCrudCreatorCore.CRUD_Templates.SQL;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
+using SqlCrudCreatorCore.DAL;
+
 
 namespace SqlCrudCreatorCore
 {
-    internal class Insert_Template: TemplateBase, iTemplate
+    public class Insert_Template: TemplateBase, iTemplate
 	{
-		public Insert_Template(ReadOnlyCollection<DbColumn> tableData, string tableName)
+		public Insert_Template(List<DataTableProperties> tableData, string tableName): base(tableData, tableName)
 		{
-			ColumData = tableData;
-
-			ColumNames = CreateColumnNames(ColumData, true);
 			SprocName = GetSprocName(tableName);
-			TableName = tableName;
-			Parameters = CreateParameters(ColumData, false,true);
-			PrimaryKey = ColumData.Where(x => x.IsIdentity == true).FirstOrDefault().ColumnName;
 		}
 
 		public string CreateSproc()
@@ -34,7 +24,7 @@ namespace SqlCrudCreatorCore
 
 			return text;
         }
-		 public static string GetSprocName(string tableName)
+		 public string GetSprocName(string tableName)
         {
 			return $"{tableName}_Create";
         }

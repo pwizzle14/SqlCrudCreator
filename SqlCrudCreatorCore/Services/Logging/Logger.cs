@@ -8,7 +8,6 @@ using System.Reflection;
 
 namespace SqlCrudCreatorCore.Services.Logging
 {
-    
         public interface ILogger
         {
             void Debug(string message);

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
+﻿using SqlCrudCreatorCore.DAL;
 
 namespace SqlCrudCreatorCore
 {
@@ -20,15 +16,13 @@ namespace SqlCrudCreatorCore
         public string ObjectName = string.Empty;
         public string PrimaryKey = string.Empty;
         
-
         private string Line_Break = "\r\n";
         private string TAB = "\t";
         private string DOUBLETAB = "\t\t";
+
+        private string _namespace = "DataAccessLayer";
         
-
-
-
-        public ClassGenerator(ReadOnlyCollection<DbColumn> tableData, string tableName, string className, string objectName)
+        public ClassGenerator(List<DataTableProperties> tableData, string tableName, string className, string objectName)
         {
 
             PropInfo = ClassGeneratorProperties.ConvertProperites(tableData);
@@ -94,7 +88,7 @@ namespace SqlCrudCreatorCore
                    $"using System.Linq;{Line_Break}" +
                    $"using Newtonsoft.Json;{Line_Break}" +
                    $"{Line_Break}" +
-                   $"namespace HireLibreaNet{Line_Break}" +
+                   $"namespace {_namespace}{Line_Break}" +
                    "{" +
                    $"{Line_Break}{TAB}public class {ClassName}" +
                    "{" +
@@ -193,7 +187,7 @@ namespace SqlCrudCreatorCore
                 }
             }
 
-            public static List<ClassGeneratorProperties> ConvertProperites(ReadOnlyCollection<DbColumn> tableData)
+            public static List<ClassGeneratorProperties> ConvertProperites(List<DataTableProperties> tableData)
             {
                 
                 var result = new List<ClassGeneratorProperties>();
