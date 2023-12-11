@@ -1,5 +1,7 @@
 ﻿
 
+using static GoldenvaleDAL.Utilities;
+
 namespace GoldenvaleDAL.DataLayerWorker
 {
     public interface iDataLayerWorker
@@ -7,8 +9,9 @@ namespace GoldenvaleDAL.DataLayerWorker
         private string _connectionString => string.Empty;
 
         public List<iDataLayerObj> Select<iDataLayerObj>(iDataLayerObj obj);
-        public bool Delete<iDataLayerObj>(iDataLayerObj obj);
-        public bool Update<iDataLayerObj>(iDataLayerObj obj);
-        public bool Create<iDataLayerObj>(iDataLayerObj obj);
+        public void Delete<iDataLayerObj>(iDataLayerObj obj);
+        public void Update<iDataLayerObj>(iDataLayerObj obj);
+        public void Create<iDataLayerObj>(iDataLayerObj obj);
+        public List<iDataLayerObj>ExecuteSproc(string StoredProcName, iDataLayerObj obj);
     }
 }

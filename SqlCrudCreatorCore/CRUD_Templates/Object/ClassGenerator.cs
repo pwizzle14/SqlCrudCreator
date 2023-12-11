@@ -61,7 +61,7 @@ namespace SqlCrudCreatorCore
             return 
                    $"namespace {_namespace}{Line_Break}" +
                    "{" +
-                   $"{Line_Break}{TAB}public class {ClassName}: iDataLayerObj{Line_Break}" +
+                   $"{Line_Break}{TAB}public partial class {ClassName}: iDataLayerObj{Line_Break}" +
                    $"{TAB}" + "{" +
                    $"{Line_Break}{Line_Break}";
 
