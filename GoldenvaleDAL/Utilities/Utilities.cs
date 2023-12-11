@@ -10,6 +10,7 @@ namespace GoldenvaleDAL
             UPDATE = 1,
             DELETE = 2,
             SELECT = 3,
+            SPROC = 4
         }
 
         public static Dictionary<string, object> ToDictionary(object obj, SQL_FUNCTION_TYPE functionType)

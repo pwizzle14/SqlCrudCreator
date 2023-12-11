@@ -10,28 +10,18 @@ namespace GoldenvaleDAL.DataLayerWorker
         private string _connectionString = "server=Doms-Laptop;initial catalog=Goldenvale;trusted_connection=true";
 
         #region CRUD
-        public bool Create<iDataLayerObj>(iDataLayerObj obj)
+        public void Create<iDataLayerObj>(iDataLayerObj obj)
         {
             //get parmeters 
-            var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, SQL_FUNCTION_TYPE.CREATE);
+            PreExecute<iDataLayerObj>(obj, SQL_FUNCTION_TYPE.CREATE);
 
-            var parms = Utilities.ToDictionary(obj, SQL_FUNCTION_TYPE.CREATE);
-
-            Execute<iDataLayerObj>(selectSproc, parms);
-
-            return true;
+            return ;
         }
 
-        public bool Delete<iDataLayerObj>(iDataLayerObj obj)
+        public void Delete<iDataLayerObj>(iDataLayerObj obj)
         {
-            var parms = Utilities.ToDictionary(obj, SQL_FUNCTION_TYPE.SELECT);
-
-            //get parmeters 
-            var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, SQL_FUNCTION_TYPE.DELETE);
-
-            Execute<iDataLayerObj>(selectSproc, parms);
-
-            return true;
+            PreExecute(obj, SQL_FUNCTION_TYPE.DELETE);
+            return;
         }
 
         /// <summary>
@@ -41,27 +31,33 @@ namespace GoldenvaleDAL.DataLayerWorker
         /// <returns></returns>
         public List<iDataLayerObj> Select<iDataLayerObj>(iDataLayerObj obj)
         {
-            var parms = Utilities.ToDictionary(obj, SQL_FUNCTION_TYPE.SELECT);
-
-            //get parmeters 
-            var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, SQL_FUNCTION_TYPE.SELECT);
-
-            var results = Execute<iDataLayerObj>(selectSproc, parms);
-
-            return results;
+            return PreExecute(obj,SQL_FUNCTION_TYPE.SELECT);
         }
 
-        public bool Update<iDataLayerObj>(iDataLayerObj obj)
+        public void Update<iDataLayerObj>(iDataLayerObj obj)
         {
-            //get parmeters 
-            var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, SQL_FUNCTION_TYPE.UPDATE);
-
-            var parms = Utilities.ToDictionary(obj, SQL_FUNCTION_TYPE.UPDATE);
-
-            Execute<iDataLayerObj>(selectSproc, parms);
-
-            return true;
+            PreExecute(obj, SQL_FUNCTION_TYPE.UPDATE);
+            return;
         }
+        #endregion
+
+        #region Custom
+        public List<iDataLayerObj> PreExecute<iDataLayerObj>(iDataLayerObj obj, SQL_FUNCTION_TYPE funcType)
+        {
+            var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, funcType);
+
+            var parms = Utilities.ToDictionary(obj, funcType);
+
+            return Execute<iDataLayerObj>(selectSproc, parms);
+        }
+
+        public List<iDataLayerObj> ExecuteSproc(string storedProcName, iDataLayerObj obj)
+        {
+            var parms = Utilities.ToDictionary(obj, SQL_FUNCTION_TYPE.SPROC);
+
+            return Execute<iDataLayerObj>(storedProcName, parms);
+        }
+
         #endregion
 
         private List<iDataLayerObj> Execute<iDataLayerObj>(string sprocName, Dictionary<string, object> parms)
