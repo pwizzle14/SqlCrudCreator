@@ -1,4 +1,5 @@
 ﻿using SqlCrudCreatorCore.DAL;
+using static SqlCrudCreatorCore.DBTableHelper;
 
 namespace SqlCrudCreatorCore
 {
@@ -20,7 +21,7 @@ namespace SqlCrudCreatorCore
         private string TAB = "\t";
         private string DOUBLETAB = "\t\t";
 
-        private string _namespace = "DataAccessLayer";
+        private string _namespace = "GoldenvaleDAL.ClassObjects";
         
         public ClassGenerator(List<DataTableProperties> tableData, string tableName, string className, string objectName)
         {
@@ -43,9 +44,7 @@ namespace SqlCrudCreatorCore
             foreach (var prop in PropInfo)
             {
                 string res = $"{DOUBLETAB}public {prop.PropertyType} {prop.PropertyName} " +
-                            "{ get return " +
-                            $"{prop.PrivatePropertyName};" + "} " +
-                            "set { " + $"{prop.PrivatePropertyName} = value;" + " }} \r\n";
+                            " { get; set; }\r\n";
 
 
                 result += res;
@@ -56,113 +55,55 @@ namespace SqlCrudCreatorCore
 
             return result;
         }
-
-
-        public string GetPrivateProperities()
-        {
-
-            string result = string.Empty;
-
-            foreach (var prop in PropInfo)
-            {
-
-                string res = $"{DOUBLETAB}private {prop.PropertyType} {prop.PrivatePropertyName} = {prop.ObjectValue}; \r\n";
-
-                result += res;
-
-            }
-
-            result += $"{Line_Break}{Line_Break}";
-
-            return result;
-        }
-
 
         public string GetUsingStatements()
         {
-            return $"using System;{Line_Break}" +
-                   $"using System.Collections;{Line_Break}" +
-                   $"using System.Collections.Generic;{Line_Break}" +
-                   $"using System.ComponentModel.DataAnnotations;{Line_Break}" +
-                   $"using System.Data;{Line_Break}" +
-                   $"using System.Linq;{Line_Break}" +
-                   $"using Newtonsoft.Json;{Line_Break}" +
-                   $"{Line_Break}" +
+            return 
                    $"namespace {_namespace}{Line_Break}" +
                    "{" +
-                   $"{Line_Break}{TAB}public class {ClassName}" +
-                   "{" +
-                   $"{Line_Break}{Line_Break}" +
-                   $"{DOUBLETAB}private static string TableName = \"{TableName}\";{Line_Break}{Line_Break}";
+                   $"{Line_Break}{TAB}public class {ClassName}: iDataLayerObj{Line_Break}" +
+                   $"{TAB}" + "{" +
+                   $"{Line_Break}{Line_Break}";
+
+
+                   
         }
 
-        public string GetCreateMethod()
+        public string GetSprocNames(SQL_FUNCTION_TYPE type)
         {
-
             var result = string.Empty;
+            var nameOfFunction = Enum.GetName(type);
 
-            result += $"{DOUBLETAB}public static int Create({ClassName} {ObjectName}){Line_Break}{DOUBLETAB}" +
-                     "{" +
-                     $"{Line_Break}{DOUBLETAB}{TAB}var parms = {ObjectName}.ToDictionary();{Line_Break}" +
-                     $"{DOUBLETAB}{TAB}parms.Remove(\"{PrimaryKey}\"); {Line_Break}" +
-                     $"{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}" +
-                     $"{DOUBLETAB}{TAB}var res = dl.Create(parms, TableName);{Line_Break}" +
-                     $"{DOUBLETAB}{TAB}return res;{Line_Break}{DOUBLETAB}" +
+            result += $"{DOUBLETAB}public string SprocName{nameOfFunction}(){Line_Break}{DOUBLETAB}" +
+                     "{" + $"{Line_Break}" +
+                     $"{DOUBLETAB}{TAB} return \"{TableName}_{nameOfFunction}\";" +
+                     $"{Line_Break}{DOUBLETAB}" +
                      "}" +
                      $"{Line_Break}";
 
 
 
-                return result;
+            return result;
+        }
 
+        public string GetCreateMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Create);
         }
 
         public string GetUpdateMethod()
         {
-            var result = string.Empty;
-
-            result += $"{Line_Break}" +
-                $"{DOUBLETAB}public static void Update({ClassName} {ObjectName}){Line_Break}{DOUBLETAB}" +
-                "{" +
-                $"{Line_Break}{DOUBLETAB}{TAB}var parms = {ObjectName}.ToDictionary();{Line_Break}" +
-                $"{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}{DOUBLETAB}" +
-                $"{TAB}dl.Update(parms, TableName);{Line_Break}" +
-                $"{DOUBLETAB}" +
-                "}" +
-                $"{Line_Break}";
-
-            return result;
+            return GetSprocNames(SQL_FUNCTION_TYPE.Update);
         }
 
         public string GetDeleteMethod()
         {
-            var result = string.Empty;
-
-            result += $"{Line_Break}" +
-                $"{DOUBLETAB}public static void Delete(int Id){Line_Break}{DOUBLETAB}" +
-                "{" +
-                $"{Line_Break}{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}" +
-                $"{DOUBLETAB}{TAB}Dictionary<string, object> parms = new Dictionary<string, object>();{Line_Break}" +
-                $"{DOUBLETAB}{TAB}Parms.Add(\"{PrimaryKey}\", Id);{Line_Break}" +
-                $"{DOUBLETAB}{TAB}dl.Delete(parms, TableName);{Line_Break}{DOUBLETAB}" +
-                "}" +
-                $"{Line_Break}";
-
-                return result;
+            return GetSprocNames(SQL_FUNCTION_TYPE.Delete);
         }
 
         public string GetFetchByIdMethod()
         {
-            return $"{Line_Break}" +
-                    $"{DOUBLETAB}public static string FetchById(int Id){Line_Break}{DOUBLETAB}" +
-                    "{" +
-                    $"{Line_Break}{DOUBLETAB}{TAB}var parms = new Dictionary<string, object>();{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}parms.Add(\"{PrimaryKey}\", Id);{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}DataTable result = dl.FetchById(parms, TableName);{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}string tmpRes = JsonConvert.SerializeObject(result);" +
-                    $"{DOUBLETAB}{TAB}return res;{Line_Break}{DOUBLETAB}" +
-                    "}";
+            return GetSprocNames(SQL_FUNCTION_TYPE.Fetch);
         }
 
         public string GetCloseClass()

@@ -6,9 +6,21 @@ namespace SqlCrudCreatorCore
 {
     public class Insert_Template: TemplateBase, iTemplate
 	{
-		public Insert_Template(List<DataTableProperties> tableData, string tableName): base(tableData, tableName)
+        private string _parameterVariables, _columnNames;
+
+        public Insert_Template(List<DataTableProperties> tableData, string tableName): base(tableData, tableName)
 		{
 			SprocName = GetSprocName(tableName);
+
+			//need to remove the first parameter for values
+
+			_parameterVariables = CreateLisOfColumnsForInsert(true);
+
+			Parameters = CreateParameters(tableData, false, true);
+
+			ColumNames = CreateColumnNames(tableData, true);
+
+
 		}
 
 		public string CreateSproc()
@@ -18,7 +30,7 @@ namespace SqlCrudCreatorCore
 				$"{LINE_BREAK}{SetNoCount}" +
 				$"{LINE_BREAK}INSERT INTO {TableName} {LINE_BREAK}" +
 				$"({ColumNames}){LINE_BREAK}" +
-				$"VALUES({ParameterVariables})" +
+				$"VALUES({_parameterVariables})" +
 				$"{LINE_BREAK}END{LINE_BREAK}{LINE_BREAK}";
 			
 
@@ -28,7 +40,5 @@ namespace SqlCrudCreatorCore
         {
 			return $"{tableName}_Create";
         }
-		
-
 	}
 }

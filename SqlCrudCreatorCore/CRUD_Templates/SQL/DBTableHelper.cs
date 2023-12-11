@@ -25,5 +25,13 @@ namespace SqlCrudCreatorCore
             return JsonConvert.DeserializeObject<List<DataTableProperties>>(jsonResult);
         }
 
+        public enum SQL_FUNCTION_TYPE
+        {
+            Create = 0,
+            Update = 1,
+            Delete = 2,
+            Fetch = 3,
+        }
+
     }
 }

@@ -60,7 +60,6 @@ namespace SqlCrudCreatorCore.BL
             var result = string.Empty;
 
             result += gen.GetUsingStatements();
-            result += gen.GetPrivateProperities();
             result += gen.GetPublicProperties();
             result += gen.GetCreateMethod();
             result += gen.GetUpdateMethod();
@@ -79,7 +78,7 @@ namespace SqlCrudCreatorCore.BL
             var lstOfTemplates = new List<iTemplate>();
 
             
-            lstOfTemplates.Add(new Fetch_Template(_colData, _tableName));
+            lstOfTemplates.Add(new Select_Template(_colData, _tableName));
             lstOfTemplates.Add(new Insert_Template(_colData, _tableName));
             lstOfTemplates.Add(new Delete_Template(_colData, _tableName));
             lstOfTemplates.Add(new Update_Template(_colData, _tableName));
