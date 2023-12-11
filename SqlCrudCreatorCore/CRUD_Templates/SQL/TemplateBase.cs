@@ -56,14 +56,6 @@ namespace SqlCrudCreatorCore
             }
         }
 
-        public string ParameterVariables
-        {
-            get
-            {
-                return CreateLisOfColumnsForInsert();
-            }
-        }
-
         public string UpdateValues
         {
             get
@@ -117,7 +109,12 @@ namespace SqlCrudCreatorCore
 
             foreach (var col in colData)
             {
-                stb.Append($",@{col.ColumnName} {col.DataTypeName}{LINE_BREAK}");
+                var colWidth = "";
+
+                if(ClassGenerator.StringDBTypes.Contains(col.DataTypeName))
+                    colWidth = $"({col.ColumnSize})";
+
+                stb.Append($",@{col.ColumnName} {col.DataTypeName}{colWidth}{LINE_BREAK}");
             }
 
             //remove the first ","
@@ -137,11 +134,17 @@ namespace SqlCrudCreatorCore
             return text;
         }
 
-        private string CreateLisOfColumnsForInsert()
+        internal string CreateLisOfColumnsForInsert(bool excludePk = false)
         {
             StringBuilder stb = new StringBuilder();
+            var colNames = LstColumnNames;
 
-            foreach (var col in LstColumnNames)
+            if(excludePk)
+            {
+                colNames.Remove(colNames.FirstOrDefault());
+            }
+
+            foreach (var col in colNames)
             {
                 stb.Append($",{col}");
             }

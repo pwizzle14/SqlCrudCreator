@@ -9,6 +9,7 @@ namespace SqlCrudCreatorCore
 		public Delete_Template(List<DataTableProperties> tableData, string tableName): base(tableData,tableName)
 		{
 			SprocName = GetSprocName(tableName);
+			Parameters = CreateParameters(tableData, true);
 		}
 
         public string CreateSproc()
