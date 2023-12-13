@@ -61,6 +61,7 @@ namespace SqlCrudCreatorCore.BL
 
             result += gen.GetUsingStatements();
             result += gen.GetPublicProperties();
+            result += gen.GetPrimaryKeyFunction(gen.PrimaryKey);
             result += gen.GetCreateMethod();
             result += gen.GetUpdateMethod();
             result += gen.GetDeleteMethod();
