@@ -63,10 +63,25 @@ namespace SqlCrudCreatorCore
                    "{" +
                    $"{Line_Break}{TAB}public partial class {ClassName}: iDataLayerObj{Line_Break}" +
                    $"{TAB}" + "{" +
-                   $"{Line_Break}{Line_Break}";
+                   $"{Line_Break}";
 
 
                    
+        }
+
+        public string GetPrimaryKeyFunction(string primaryKey)
+        {
+            string result = "";
+
+            result += $"{DOUBLETAB}public string GetPrimaryKey()" +
+                $"{Line_Break}{DOUBLETAB}" + "{" + $"{Line_Break}" + 
+                
+                $"return \"{primaryKey}\";{Line_Break}{DOUBLETAB}" +
+                "}" +
+                $"{Line_Break}{Line_Break}";
+
+            return result;
+
         }
 
         public string GetSprocNames(SQL_FUNCTION_TYPE type)

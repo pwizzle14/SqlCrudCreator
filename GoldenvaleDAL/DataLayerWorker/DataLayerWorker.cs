@@ -10,12 +10,13 @@ namespace GoldenvaleDAL.DataLayerWorker
         private string _connectionString = "server=Doms-Laptop;initial catalog=Goldenvale;trusted_connection=true";
 
         #region CRUD
-        public void Create<iDataLayerObj>(iDataLayerObj obj)
+        public iDataLayerObj Create<iDataLayerObj>(iDataLayerObj obj)
         {
             //get parmeters 
-            PreExecute<iDataLayerObj>(obj, SQL_FUNCTION_TYPE.CREATE);
+            var id = PreExecute(obj, SQL_FUNCTION_TYPE.CREATE).FirstOrDefault();
 
-            return ;
+            return id;
+             
         }
 
         public void Delete<iDataLayerObj>(iDataLayerObj obj)
@@ -24,14 +25,19 @@ namespace GoldenvaleDAL.DataLayerWorker
             return;
         }
 
-        /// <summary>
-        /// Fetches Records by ID
-        /// </summary>
-        /// <param name="obj">The ID of this field needs to be set</param>
-        /// <returns></returns>
+        public void DeleteById(int id, iDataLayerObj obj)
+        {
+           PreExecuteById(id, obj, SQL_FUNCTION_TYPE.DELETE);
+        }
+
         public List<iDataLayerObj> Select<iDataLayerObj>(iDataLayerObj obj)
         {
             return PreExecute(obj,SQL_FUNCTION_TYPE.SELECT);
+        }
+
+        public iDataLayerObj? SelectById<iDataLayerObj>(int id, iDataLayerObj objType)
+        {
+            return PreExecuteById<iDataLayerObj>(id, objType, SQL_FUNCTION_TYPE.SELECT).FirstOrDefault();
         }
 
         public void Update<iDataLayerObj>(iDataLayerObj obj)
@@ -42,6 +48,17 @@ namespace GoldenvaleDAL.DataLayerWorker
         #endregion
 
         #region Custom
+
+        private List<iDataLayerObj> PreExecuteById<iDataLayerObj>(int id, iDataLayerObj objType, SQL_FUNCTION_TYPE funcType)
+        {
+            var obj = (GoldenvaleDAL.iDataLayerObj)objType;
+            var primarykeyName = obj.GetPrimaryKey();
+            var sprocName = GetSprocName(obj, funcType);
+            
+            var parm = GetPrimaryKeyAsParameter(primarykeyName, id);
+
+            return Execute<iDataLayerObj>(sprocName, parm);
+        }
         public List<iDataLayerObj> PreExecute<iDataLayerObj>(iDataLayerObj obj, SQL_FUNCTION_TYPE funcType)
         {
             var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, funcType);
@@ -105,5 +122,17 @@ namespace GoldenvaleDAL.DataLayerWorker
                     throw new Exception("Cannot find requested Stored Procedure");
             }
         }
+
+        private Dictionary<string, object> GetPrimaryKeyAsParameter(string primaryKey, int id)
+        {
+            var parm = new Dictionary<string, object>();
+            parm.Add($"@{primaryKey}", id);
+
+            return parm;
+        }
+
+        
+
+
     }
 }
