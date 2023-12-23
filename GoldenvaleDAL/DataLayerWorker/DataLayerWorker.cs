@@ -5,100 +5,87 @@ using static GoldenvaleDAL.Utilities;
 
 namespace GoldenvaleDAL.DataLayerWorker
 {
-    public class DataLayerWorker: iDataLayerWorker
+    public class DataLayerWorker: IDataLayerWorker
     {
         private string _connectionString = "server=Doms-Laptop;initial catalog=Goldenvale;trusted_connection=true";
 
         #region CRUD
-        public iDataLayerObj Create<iDataLayerObj>(iDataLayerObj obj)
+        public async Task<IDataLayerObj> Create<IDataLayerObj>(IDataLayerObj obj)
         {
             //get parmeters 
-            var id = PreExecute(obj, SQL_FUNCTION_TYPE.CREATE).FirstOrDefault();
+            var id = await PreExecute<IDataLayerObj>(obj, SQL_FUNCTION_TYPE.CREATE);
 
-            return id;
+            return id.FirstOrDefault();
              
         }
 
-        public void Delete<iDataLayerObj>(iDataLayerObj obj)
+        public async Task DeleteById(int id, IDataLayerObj obj)
         {
-            PreExecute(obj, SQL_FUNCTION_TYPE.DELETE);
-            return;
+            await PreExecuteById<IDataLayerObj>(id, obj, SQL_FUNCTION_TYPE.DELETE);
+            return; 
         }
 
-        public void DeleteById(int id, iDataLayerObj obj)
+        public async Task<IDataLayerObj?> SelectById<IDataLayerObj>(int id, IDataLayerObj objType)
         {
-           PreExecuteById(id, obj, SQL_FUNCTION_TYPE.DELETE);
+            var results =  await PreExecuteById<IDataLayerObj>(id, objType, SQL_FUNCTION_TYPE.SELECT);
+
+            return results.FirstOrDefault();
         }
 
-        public List<iDataLayerObj> Select<iDataLayerObj>(iDataLayerObj obj)
+        public async Task Update<IDataLayerObj>(IDataLayerObj obj)
         {
-            return PreExecute(obj,SQL_FUNCTION_TYPE.SELECT);
-        }
-
-        public iDataLayerObj? SelectById<iDataLayerObj>(int id, iDataLayerObj objType)
-        {
-            return PreExecuteById<iDataLayerObj>(id, objType, SQL_FUNCTION_TYPE.SELECT).FirstOrDefault();
-        }
-
-        public void Update<iDataLayerObj>(iDataLayerObj obj)
-        {
-            PreExecute(obj, SQL_FUNCTION_TYPE.UPDATE);
+            await PreExecute<IDataLayerObj>(obj, SQL_FUNCTION_TYPE.UPDATE);
             return;
         }
         #endregion
 
-        #region Custom
+        #region CustomSprocs
 
-        private List<iDataLayerObj> PreExecuteById<iDataLayerObj>(int id, iDataLayerObj objType, SQL_FUNCTION_TYPE funcType)
+        public async Task<List<IDataLayerObj>>ExecuteSproc<IDataLayerObj>(string storedProcName, Dictionary<string, object> parms)
         {
-            var obj = (GoldenvaleDAL.iDataLayerObj)objType;
+            return await Execute<IDataLayerObj>(storedProcName, parms);
+        }
+
+        #endregion
+
+        #region PreExecute
+
+        private async Task<List<IDataLayerObj>> PreExecuteById<IDataLayerObj>(int id, IDataLayerObj objType, SQL_FUNCTION_TYPE funcType)
+        {
+            var obj = (GoldenvaleDAL.IDataLayerObj)objType;
             var primarykeyName = obj.GetPrimaryKey();
             var sprocName = GetSprocName(obj, funcType);
             
             var parm = GetPrimaryKeyAsParameter(primarykeyName, id);
 
-            return Execute<iDataLayerObj>(sprocName, parm);
+            return await Execute<IDataLayerObj>(sprocName, parm);
         }
-        public List<iDataLayerObj> PreExecute<iDataLayerObj>(iDataLayerObj obj, SQL_FUNCTION_TYPE funcType)
+        private async Task<List<IDataLayerObj>> PreExecute<IDataLayerObj>(IDataLayerObj obj, SQL_FUNCTION_TYPE funcType)
         {
-            var selectSproc = GetSprocName((GoldenvaleDAL.iDataLayerObj)obj, funcType);
+            var selectSproc = GetSprocName((GoldenvaleDAL.IDataLayerObj)obj, funcType);
 
             var parms = Utilities.ToDictionary(obj, funcType);
 
-            return Execute<iDataLayerObj>(selectSproc, parms);
-        }
-
-        public List<iDataLayerObj> ExecuteSproc(string storedProcName, iDataLayerObj obj)
-        {
-            var parms = Utilities.ToDictionary(obj, SQL_FUNCTION_TYPE.SPROC);
-
-            return Execute<iDataLayerObj>(storedProcName, parms);
+            return await Execute<IDataLayerObj>(selectSproc, parms);
         }
 
         #endregion
 
-        private List<iDataLayerObj> Execute<iDataLayerObj>(string sprocName, Dictionary<string, object> parms)
+        #region Execute
+
+        private async Task<List<IDataLayerObj>> Execute<IDataLayerObj>(string sprocName, Dictionary<string, object> parms)
         {
             
             SqlConnection sqlCon = new SqlConnection(_connectionString);
-            SqlDataAdapter adapter = new SqlDataAdapter();
-            SqlCommand cmd = new SqlCommand(sprocName, sqlCon);
-            cmd.CommandType = CommandType.StoredProcedure;
-            
-            if(parms != null)
-            {
-                foreach(KeyValuePair<string,object> param in parms)
-                {
-                      cmd.Parameters.Add(new SqlParameter($"@{param.Key}", param.Value));
-                }
-            }
-
-            var results = sqlCon.Query<iDataLayerObj>(sprocName,parms,commandType: CommandType.StoredProcedure).ToList();
+           
+            var results = sqlCon.Query<IDataLayerObj>(sprocName,parms,commandType: CommandType.StoredProcedure).ToList();
 
             return results;
         }
+        #endregion
 
-        private string GetSprocName(iDataLayerObj data, SQL_FUNCTION_TYPE type)
+        #region Utilities
+        private string GetSprocName(IDataLayerObj data, SQL_FUNCTION_TYPE type)
         {
             switch (type)
             {
@@ -131,8 +118,6 @@ namespace GoldenvaleDAL.DataLayerWorker
             return parm;
         }
 
-        
-
-
+        #endregion
     }
 }

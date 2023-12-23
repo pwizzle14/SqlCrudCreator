@@ -1,6 +1,6 @@
 ﻿namespace GoldenvaleDAL
 {
-    public interface iDataLayerObj
+    public interface IDataLayerObj
     {
         public string GetPrimaryKey();
         public string SprocNameCreate();

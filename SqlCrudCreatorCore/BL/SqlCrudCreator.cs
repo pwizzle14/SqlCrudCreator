@@ -1,9 +1,6 @@
-﻿using log4net.Core;
-using SqlCrudCreatorCore.CRUD_Templates.SQL;
+﻿using SqlCrudCreatorCore.CRUD_Templates.SQL;
 using SqlCrudCreatorCore.DAL;
-using SqlCrudCreatorCore.Services;
 using SqlCrudCreatorCore.Utilites;
-using System.Collections;
 using System.Text;
 
 namespace SqlCrudCreatorCore.BL
@@ -12,17 +9,15 @@ namespace SqlCrudCreatorCore.BL
     {
 
         private IDatabaseService _databaseService = null;
-        private iFileWriter _fileWriter = null;
 
         private string _tableName = "";
         private string _objectName = "";
         private string _className = "";
-        private string _outputDir = "";
         private List<DataTableProperties> _colData = null;
         private SqlCrudCreatorResults _results = new SqlCrudCreatorResults();
 
 
-        public SqlCrudCreatorResults CreateAllClassObjAndSQL(IDatabaseService databaseService, iFileWriter fileWriter, string tableName, string objectName, string className, string outputDir)
+        public SqlCrudCreatorResults CreateAllClassObjAndSQL(IDatabaseService databaseService, string tableName, string objectName, string className)
         {
             try
             {
@@ -31,8 +26,7 @@ namespace SqlCrudCreatorCore.BL
                 _tableName = tableName;
                 _objectName = objectName;
                 _className = className;
-                _fileWriter = fileWriter;
-                _outputDir = outputDir;
+                
 
                 _colData = DBTableHelper.ReadPropertiesFromTable(_tableName, _databaseService);
 
@@ -57,19 +51,19 @@ namespace SqlCrudCreatorCore.BL
         {
             ClassGenerator gen = new ClassGenerator(_colData, _tableName, _className, _objectName);
 
-            var result = string.Empty;
+            StringBuilder result = new StringBuilder();
 
-            result += gen.GetUsingStatements();
-            result += gen.GetPublicProperties();
-            result += gen.GetPrimaryKeyFunction(gen.PrimaryKey);
-            result += gen.GetCreateMethod();
-            result += gen.GetUpdateMethod();
-            result += gen.GetDeleteMethod();
-            result += gen.GetFetchByIdMethod();
-            result += gen.GetCloseClass();
+            result.Append(gen.GetUsingStatements());
+            result.Append(gen.GetPublicProperties());
+            result.Append(gen.GetPrimaryKeyFunction(gen.PrimaryKey));
+            result.Append(gen.GetCreateMethod());
+            result.Append(gen.GetUpdateMethod());
+            result.Append(gen.GetDeleteMethod());
+            result.Append(gen.GetFetchByIdMethod());
+            result.Append(gen.GetCloseClass());
 
 
-            return result;
+            return result.ToString();
         }
 
         private string CreateSqlScripts()
