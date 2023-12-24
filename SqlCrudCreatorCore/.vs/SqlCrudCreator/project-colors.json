@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "1dd21690-c092-47f8-825a-9f2bc0779cee": {
+      "ProjectGuid": "1dd21690-c092-47f8-825a-9f2bc0779cee",
+      "DisplayName": "SQL_CRUD_CREATOR_TESTS",
+      "ColorIndex": 0
+    },
+    "838f0e33-d44e-4fde-90a4-a1b2ce763ba7": {
+      "ProjectGuid": "838f0e33-d44e-4fde-90a4-a1b2ce763ba7",
+      "DisplayName": "GoldenvaleDAL",
+      "ColorIndex": 1
+    },
+    "9fe9d0b0-93fa-4347-b135-b2bb7d675636": {
+      "ProjectGuid": "9fe9d0b0-93fa-4347-b135-b2bb7d675636",
+      "DisplayName": "SqlCrudCreatorCore",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

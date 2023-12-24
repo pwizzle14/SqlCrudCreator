@@ -1,6 +1,6 @@
 ﻿namespace GoldenvaleDAL.ClassObjects
 {
-	public partial class Persons : iDataLayerObj
+	public partial class Persons : IDataLayerObj
 	{
 		public int PersonID { get; set; }
 		public string LastName { get; set; }

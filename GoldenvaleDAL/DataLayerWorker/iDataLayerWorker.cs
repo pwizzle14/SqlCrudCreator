@@ -1,19 +1,15 @@
 ﻿
 
-using static GoldenvaleDAL.Utilities;
-
 namespace GoldenvaleDAL.DataLayerWorker
 {
-    public interface iDataLayerWorker
+    public interface IDataLayerWorker
     {
         private string _connectionString => string.Empty;
 
-        public iDataLayerObj? SelectById<iDataLayerObj>(int id, iDataLayerObj obj);
-        public List<iDataLayerObj> Select<iDataLayerObj>(iDataLayerObj obj);
-        public void Delete<iDataLayerObj>(iDataLayerObj obj);
-        public void DeleteById(int id, iDataLayerObj obj);
-        public void Update<iDataLayerObj>(iDataLayerObj obj);
-        public iDataLayerObj Create<iDataLayerObj>(iDataLayerObj obj);
-        public List<iDataLayerObj>ExecuteSproc(string StoredProcName, iDataLayerObj obj);
+        public Task<IDataLayerObj>? SelectById<IDataLayerObj>(int id, IDataLayerObj obj);
+        public Task DeleteById(int id, IDataLayerObj obj);
+        public Task Update<IDataLayerObj>(IDataLayerObj obj);
+        public Task<IDataLayerObj> Create<IDataLayerObj>(IDataLayerObj obj);
+        public Task<List<IDataLayerObj>> ExecuteSproc<IDataLayerObj>(string storedProcName, Dictionary<string, object> parms);
     }
 }
