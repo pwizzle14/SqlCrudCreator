@@ -8,6 +8,14 @@ namespace GoldenvaleDAL.DataLayerWorker
     public class DataLayerWorker: IDataLayerWorker
     {
         private string _connectionString = "server=Doms-Laptop;initial catalog=Goldenvale;trusted_connection=true";
+        private SqlConnection _sqlConnection = null;
+
+
+        public DataLayerWorker()
+        {
+            _sqlConnection = new SqlConnection(_connectionString);
+        }
+          
 
         #region CRUD
         public async Task<IDataLayerObj> Create<IDataLayerObj>(IDataLayerObj obj)
@@ -75,12 +83,7 @@ namespace GoldenvaleDAL.DataLayerWorker
 
         private async Task<List<IDataLayerObj>> Execute<IDataLayerObj>(string sprocName, Dictionary<string, object> parms)
         {
-            
-            SqlConnection sqlCon = new SqlConnection(_connectionString);
-           
-            var results = sqlCon.Query<IDataLayerObj>(sprocName,parms,commandType: CommandType.StoredProcedure).ToList();
-
-            return results;
+            return _sqlConnection.Query<IDataLayerObj>(sprocName, parms, commandType: CommandType.StoredProcedure).ToList(); 
         }
         #endregion
 
