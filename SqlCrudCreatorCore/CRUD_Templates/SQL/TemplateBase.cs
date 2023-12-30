@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Text;
 using System.Linq;
-
+using SqlCrudCreatorCore.DAL;
 
 namespace SqlCrudCreatorCore
 {
@@ -17,9 +17,24 @@ namespace SqlCrudCreatorCore
         public string Parameters = "";
         public string TableName = "";
         public string PrimaryKey = "";
-        public ReadOnlyCollection<DbColumn> ColumData;
+        public List<DataTableProperties> ColumData;
         public List<string> LstColumnNames = new List<string>();
 
+        public TemplateBase(List<DataTableProperties> tableData, string tableName)
+        {
+            ColumData = tableData;
+
+            ColumNames = CreateColumnNames(ColumData);
+            
+            TableName = tableName;
+            Parameters = CreateParameters(ColumData, false);
+            PrimaryKey = ColumData.FirstOrDefault(x => x.IsIdentity == true).ColumnName;
+        }
+
+        private string GetSprocName(string tableName)
+        {
+            return "DEFAULT_SPROC_NAME";
+        }
 
         public string SetNoCount
         {
@@ -41,14 +56,6 @@ namespace SqlCrudCreatorCore
             }
         }
 
-        public string ParameterVariables
-        {
-            get
-            {
-                return CreateLisOfColumnsForInsert();
-            }
-        }
-
         public string UpdateValues
         {
             get
@@ -57,7 +64,7 @@ namespace SqlCrudCreatorCore
             }
         }
 
-        public string CreateColumnNames(ReadOnlyCollection<DbColumn> colData,bool excludePk = false )
+        public string CreateColumnNames(List<DataTableProperties> colData,bool excludePk = false )
         {
             StringBuilder stb = new StringBuilder();
             var res = colData.ToList();
@@ -79,7 +86,7 @@ namespace SqlCrudCreatorCore
             return stb.ToString();
         }
 
-        public string CreateParameters(ReadOnlyCollection<DbColumn> colData, bool primaryKeyOnly = false, bool excludePk = false)
+        public string CreateParameters(List<DataTableProperties> colData, bool primaryKeyOnly = false, bool excludePk = false)
         {
             var res = colData.ToList();
 
@@ -95,14 +102,19 @@ namespace SqlCrudCreatorCore
 
             return CreateParameters(res);
         }
-        private string CreateParameters(List<DbColumn> colData)
+        private string CreateParameters(List<DataTableProperties> colData)
         {
 
             StringBuilder stb = new StringBuilder();
 
             foreach (var col in colData)
             {
-                stb.Append($",@{col.ColumnName} {col.DataTypeName}{LINE_BREAK}");
+                var colWidth = "";
+
+                if(ClassGeneratorProperties.StringDBTypes.Contains(col.DataTypeName))
+                    colWidth = $"({col.ColumnSize})";
+
+                stb.Append($",@{col.ColumnName} {col.DataTypeName}{colWidth}{LINE_BREAK}");
             }
 
             //remove the first ","
@@ -122,11 +134,17 @@ namespace SqlCrudCreatorCore
             return text;
         }
 
-        private string CreateLisOfColumnsForInsert()
+        internal string CreateLisOfColumnsForInsert(bool excludePk = false)
         {
             StringBuilder stb = new StringBuilder();
+            var colNames = LstColumnNames;
 
-            foreach (var col in LstColumnNames)
+            if(excludePk)
+            {
+                colNames.Remove(colNames.FirstOrDefault());
+            }
+
+            foreach (var col in colNames)
             {
                 stb.Append($",{col}");
             }
@@ -143,7 +161,7 @@ namespace SqlCrudCreatorCore
 
             foreach (var col in ColumData)
             {
-                if (!col.IsIdentity.Value)
+                if (!col.IsIdentity)
                 {
                     stb.Append($",{col.ColumnName} = @{col.ColumnName}{LINE_BREAK}");
                 }

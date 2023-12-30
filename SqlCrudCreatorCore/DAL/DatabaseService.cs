@@ -1,39 +1,47 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
+using SqlCrudCreatorCore.Utilites;
+
 
 namespace SqlCrudCreatorCore.DAL
 {
-    public class DatabaseService : IDatabaseService
+    public partial class DatabaseService : IDatabaseService
     {
-
         private string _connectionString = "";
-        public DatabaseService()
+        
+        private void GetConfigSettings()
         {
+            _connectionString = "server=Doms-Laptop;initial catalog=Goldenvale;trusted_connection=true";
         }
-
-        public DatabaseService(string connectionString)
+        public DataTable GetTableInfo(string tableName)
         {
-        }
-
-        public ReadOnlyCollection<DbColumn> ReadPropertiesFromTable(string tableName)
-        {
-            string strSQL = $"SELECT TOP 1 * FROM {tableName}";
-
-            // Assumes connectionString is a valid connection string.  
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            try
             {
+                GetConfigSettings();
 
-                SqlCommand command = new SqlCommand(strSQL, connection);
+                string strSQL = $"SELECT TOP 1 * FROM {tableName}";
 
-                connection.Open();
-                var reader = command.ExecuteReader();
-                var dt = reader.GetColumnSchema();
+                // Assumes connectionString is a valid connection string.  
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
 
-                return dt;
+                    SqlCommand command = new SqlCommand(strSQL, connection);
+
+                    connection.Open();
+                    var reader = command.ExecuteReader();
+                    var dt = reader.GetSchemaTable();
+                    //return dt;
+
+                    return dt;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw new SqlCrudCreatorException($"Error Fetching data from table {tableName}", ex);
             }
         }
+
+       
     }
 }

@@ -1,26 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.Data.Common;
+﻿using System.Data;
+
 using SqlCrudCreatorCore.DAL;
+using Newtonsoft.Json;
 
 namespace SqlCrudCreatorCore
 {
-    public class DBTableHelper
+    internal class DBTableHelper
     {
-        private static IDatabaseService _databaseService = null;  
+        private static IDatabaseService _databaseService = null;
 
-        public static ReadOnlyCollection<DbColumn> ReadPropertiesFromTable(string tableName, IDatabaseService databaseService)
+        public static List<DataTableProperties> ReadPropertiesFromTable(string tableName, IDatabaseService databaseService)
         {
             _databaseService = databaseService;
 
-            return _databaseService.ReadPropertiesFromTable(tableName);
+            var dt = _databaseService.GetTableInfo(tableName);
+
+            return ProcessTableSchema(dt); 
         }
+
+        private static List<DataTableProperties> ProcessTableSchema(DataTable dt)
+        {
+            var jsonResult = JsonConvert.SerializeObject(dt);
+
+            return JsonConvert.DeserializeObject<List<DataTableProperties>>(jsonResult);
+        }
+
+        public enum SQL_FUNCTION_TYPE
+        {
+            Create = 0,
+            Update = 1,
+            Delete = 2,
+            Fetch = 3,
+        }
+
     }
-
-
 }

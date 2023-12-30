@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
+﻿using SqlCrudCreatorCore.DAL;
+using SqlCrudCreatorCore.Utilites;
+using SqlCrudCreatorCore.Utilities;
+using System.Runtime.CompilerServices;
+using System.Text;
+using static SqlCrudCreatorCore.DBTableHelper;
 
 namespace SqlCrudCreatorCore
 {
-    public class ClassGenerator
+    internal class ClassGenerator
     {
-
-        public static string[] StringDBTypes = new string[] { "nvarchar", "varchar" };
-        public static string[] IntDBTypes = new string[] { "int" };
-        public static string[] DecimalDBTypes = new string[] { "decimal" };
-        public static string BoolDBType = "bit";
         public List<ClassGeneratorProperties> PropInfo;
 
         public string ClassName = string.Empty;
@@ -20,15 +16,13 @@ namespace SqlCrudCreatorCore
         public string ObjectName = string.Empty;
         public string PrimaryKey = string.Empty;
         
-
         private string Line_Break = "\r\n";
         private string TAB = "\t";
         private string DOUBLETAB = "\t\t";
+
+        private string _namespace = "GoldenvaleDAL.ClassObjects";
         
-
-
-
-        public ClassGenerator(ReadOnlyCollection<DbColumn> tableData, string tableName, string className, string objectName)
+        public ClassGenerator(List<DataTableProperties> tableData, string tableName, string className, string objectName)
         {
 
             PropInfo = ClassGeneratorProperties.ConvertProperites(tableData);
@@ -41,198 +35,124 @@ namespace SqlCrudCreatorCore
             PrimaryKey = pkData.ColumnName;
         }
 
-
-        public string GetPublicProperties()
+        public string CreateClassFromTemplate()
         {
-            string result = string.Empty;
-
-            foreach (var prop in PropInfo)
+            try
             {
-                string res = $"{DOUBLETAB}public {prop.PropertyType} {prop.PropertyName} " +
-                            "{ get return " +
-                            $"{prop.PrivatePropertyName};" + "} " +
-                            "set { " + $"{prop.PrivatePropertyName} = value;" + " }} \r\n";
+                System.IO.StreamReader file = new StreamReader(@"../../../ClassObjectTemplate.txt");
 
+                string inputText = file.ReadToEnd();
 
-                result += res;
-            }
-
-
-            result += $"{Line_Break}{Line_Break}";
-
-            return result;
-        }
-
-
-        public string GetPrivateProperities()
-        {
-
-            string result = string.Empty;
-
-            foreach (var prop in PropInfo)
+                var replacers = new Dictionary<string, string>
             {
+                { "{0}", _namespace },
+                { "{1}", ClassName },
+                { "{2}", GetPublicProperties() },
+                { "{3}", GetPrimaryKeyFunction() },
+                { "{4}", GetAllMethods() }
+            };
 
-                string res = $"{DOUBLETAB}private {prop.PropertyType} {prop.PrivatePropertyName} = {prop.ObjectValue}; \r\n";
-
-                result += res;
-
-            }
-
-            result += $"{Line_Break}{Line_Break}";
-
-            return result;
-        }
-
-
-        public string GetUsingStatements()
-        {
-            return $"using System;{Line_Break}" +
-                   $"using System.Collections;{Line_Break}" +
-                   $"using System.Collections.Generic;{Line_Break}" +
-                   $"using System.ComponentModel.DataAnnotations;{Line_Break}" +
-                   $"using System.Data;{Line_Break}" +
-                   $"using System.Linq;{Line_Break}" +
-                   $"using Newtonsoft.Json;{Line_Break}" +
-                   $"{Line_Break}" +
-                   $"namespace HireLibreaNet{Line_Break}" +
-                   "{" +
-                   $"{Line_Break}{TAB}public class {ClassName}" +
-                   "{" +
-                   $"{Line_Break}{Line_Break}" +
-                   $"{DOUBLETAB}private static string TableName = \"{TableName}\";{Line_Break}{Line_Break}";
-        }
-
-        public string GetCreateMethod()
-        {
-
-            var result = string.Empty;
-
-            result += $"{DOUBLETAB}public static int Create({ClassName} {ObjectName}){Line_Break}{DOUBLETAB}" +
-                     "{" +
-                     $"{Line_Break}{DOUBLETAB}{TAB}var parms = {ObjectName}.ToDictionary();{Line_Break}" +
-                     $"{DOUBLETAB}{TAB}parms.Remove(\"{PrimaryKey}\"); {Line_Break}" +
-                     $"{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}" +
-                     $"{DOUBLETAB}{TAB}var res = dl.Create(parms, TableName);{Line_Break}" +
-                     $"{DOUBLETAB}{TAB}return res;{Line_Break}{DOUBLETAB}" +
-                     "}" +
-                     $"{Line_Break}";
-
-
-
-                return result;
-
-        }
-
-        public string GetUpdateMethod()
-        {
-            var result = string.Empty;
-
-            result += $"{Line_Break}" +
-                $"{DOUBLETAB}public static void Update({ClassName} {ObjectName}){Line_Break}{DOUBLETAB}" +
-                "{" +
-                $"{Line_Break}{DOUBLETAB}{TAB}var parms = {ObjectName}.ToDictionary();{Line_Break}" +
-                $"{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}{DOUBLETAB}" +
-                $"{TAB}dl.Update(parms, TableName);{Line_Break}" +
-                $"{DOUBLETAB}" +
-                "}" +
-                $"{Line_Break}";
-
-            return result;
-        }
-
-        public string GetDeleteMethod()
-        {
-            var result = string.Empty;
-
-            result += $"{Line_Break}" +
-                $"{DOUBLETAB}public static void Delete(int Id){Line_Break}{DOUBLETAB}" +
-                "{" +
-                $"{Line_Break}{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}" +
-                $"{DOUBLETAB}{TAB}Dictionary<string, object> parms = new Dictionary<string, object>();{Line_Break}" +
-                $"{DOUBLETAB}{TAB}Parms.Add(\"{PrimaryKey}\", Id);{Line_Break}" +
-                $"{DOUBLETAB}{TAB}dl.Delete(parms, TableName);{Line_Break}{DOUBLETAB}" +
-                "}" +
-                $"{Line_Break}";
-
-                return result;
-        }
-
-        public string GetFetchByIdMethod()
-        {
-            return $"{Line_Break}" +
-                    $"{DOUBLETAB}public static string FetchById(int Id){Line_Break}{DOUBLETAB}" +
-                    "{" +
-                    $"{Line_Break}{DOUBLETAB}{TAB}var parms = new Dictionary<string, object>();{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}parms.Add(\"{PrimaryKey}\", Id);{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}DataLayer dl = new DataLayer();{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}DataTable result = dl.FetchById(parms, TableName);{Line_Break}" +
-                    $"{DOUBLETAB}{TAB}string tmpRes = JsonConvert.SerializeObject(result);" +
-                    $"{DOUBLETAB}{TAB}return res;{Line_Break}{DOUBLETAB}" +
-                    "}";
-        }
-
-        public string GetCloseClass()
-        {
-            return $"{Line_Break}{TAB}" +
-                    "}" +
-                    $"{Line_Break}" +
-                    "}";
-        }
-
-        public class ClassGeneratorProperties
-        {
-            public string PropertyName = "";
-            public string PropertyType = "";
-            public string ObjectValue = "";
-
-            public string PrivatePropertyName
-            {
-                get
+                var parms = new TemplateFillerParms()
                 {
-                    return $"_{PropertyName}";
-                }
+                    InputText = inputText,
+                    Replacers = replacers
+                };
+
+                var res = TemplateFiller.FillClassObjectTemplate(parms);
+
+                return res;
             }
 
-            public static List<ClassGeneratorProperties> ConvertProperites(ReadOnlyCollection<DbColumn> tableData)
+            catch (Exception ex)
             {
+                throw new SqlCrudCreatorException("Error Creating Class Object", ex);
+            }
+            
+        }
+
+        private string GetPublicProperties()
+        {
+            string result = string.Empty;
+
+            foreach (var prop in PropInfo)
+            {
+                string res = $"public {prop.PropertyType} {prop.PropertyName} " +
+                            " { get; set; }" + $"{Line_Break}" +
+                            $"{DOUBLETAB}";
+
+
+                result += res;
+            }
+
+
+            result += $"{Line_Break}{Line_Break}";
+
+            return result;
+        }
+
+        private string GetPrimaryKeyFunction()
+        {
+            string result = "";
+
+            result += $"public string GetPrimaryKey()" +
+                $"{Line_Break}{DOUBLETAB}" + "{" + $"{Line_Break}" + 
                 
-                var result = new List<ClassGeneratorProperties>();
+                $"{DOUBLETAB}{TAB}return \"{PrimaryKey}\";{Line_Break}{DOUBLETAB}" +
+                "}" +
+                $"{Line_Break}{Line_Break}";
 
-                foreach (var col in tableData)
-                {
-                    var tempRes = new ClassGeneratorProperties();
+            return result;
 
-                    tempRes.PropertyName = col.ColumnName;
-
-                    if (StringDBTypes.Contains(col.DataTypeName.ToLower()))
-                    {
-                        tempRes.PropertyType = "string";
-                        tempRes.ObjectValue = "string.Empty";
-                    }
-                    else if (IntDBTypes.Contains(col.DataTypeName.ToLower()))
-                    {
-                        tempRes.PropertyType = "int";
-                        tempRes.ObjectValue = "0";
-                    }
-                    else if (col.DataTypeName.ToLower() == BoolDBType)
-                    {
-                        tempRes.PropertyType = "bool";
-                        tempRes.ObjectValue = "false";
-                    }
-                    else
-                    {
-                        tempRes.PropertyType = col.DataTypeName;
-                        tempRes.ObjectValue = "";
-                    }
+        }
 
 
-                    result.Add(tempRes);
-                }
+        private string GetAllMethods()
+        {
+            var builder = new StringBuilder();
 
-                return result;
-            }
+            builder.Append(GetCreateMethod());
+            builder.Append(GetUpdateMethod());
+            builder.Append(GetDeleteMethod());
+            builder.Append(GetFetchByIdMethod());
 
+            return builder.ToString();
+        }
+
+        private string GetCreateMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Create);
+        }
+
+        private string GetUpdateMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Update);
+        }
+
+        private string GetDeleteMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Delete);
+        }
+
+        private string GetFetchByIdMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Fetch);
+        }
+        private string GetSprocNames(SQL_FUNCTION_TYPE type)
+        {
+            var result = string.Empty;
+            var nameOfFunction = Enum.GetName(type);
+
+            result += $"public string SprocName{nameOfFunction}(){Line_Break}{DOUBLETAB}" +
+                     "{" + $"{Line_Break}" +
+                     $"{DOUBLETAB}{TAB} return \"{TableName}_{nameOfFunction}\";" +
+                     $"{Line_Break}{DOUBLETAB}" +
+                     "}" +
+                     $"{Line_Break}{DOUBLETAB}";
+
+
+
+            return result;
+        }
             
         }
     }
-}
