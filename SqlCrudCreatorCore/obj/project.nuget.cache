@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7ubJexdLVsfS+6DX98UzjfW2eCJU283ed4QFPN7iN/frxRLWFPFWYEyo1m/xHMsnsnG16xP00Z6Gqf1EhrRcXw==",
+  "dgSpecHash": "1YzjWjak+zjety2yhAw5ThM7E/I/f0/UK5PnqpmoUQQQNurytFNnpGPPa+xTZXVb4IxMLq0Iw4enIjSQmWlMEg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
+  "projectFilePath": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ddavi\\.nuget\\packages\\log4net\\2.0.15\\log4net.2.0.15.nupkg.sha512",
     "C:\\Users\\ddavi\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",

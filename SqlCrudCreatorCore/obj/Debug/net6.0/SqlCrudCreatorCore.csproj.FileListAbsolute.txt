@@ -22,3 +22,4 @@ C:\Users\ddavi\source\repos\SqlCrudCreator\SqlCrudCreatorCore\obj\Debug\net6.0\S
 C:\Users\ddavi\source\repos\SqlCrudCreator\SqlCrudCreatorCore\obj\Debug\net6.0\ref\SqlCrudCreatorCore.dll
 C:\Users\ddavi\source\repos\SqlCrudCreator\SqlCrudCreatorCore\obj\Debug\net6.0\SqlCrudCreatorCore.pdb
 C:\Users\ddavi\source\repos\SqlCrudCreator\SqlCrudCreatorCore\obj\Debug\net6.0\SqlCrudCreatorCore.csproj.AssemblyReference.cache
+C:\Users\ddavi\source\repos\SqlCrudCreator\SqlCrudCreatorCore\bin\Debug\net6.0\CRUD_Templates\Object\ClassObjectTemplate.txt
