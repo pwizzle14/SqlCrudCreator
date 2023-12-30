@@ -1,14 +1,12 @@
-﻿
-
-namespace SqlCrudCreatorCore.Utilites
+﻿namespace SqlCrudCreatorCore.Utilites
 {
     
-    public class SqlCrudCreatorExecption : Exception
+    public class SqlCrudCreatorException : Exception
         {
-            public SqlCrudCreatorExecption() { }
-            public SqlCrudCreatorExecption(string message) : base(message) { }
-            public SqlCrudCreatorExecption(string message, Exception inner) : base(message, inner) { }
-            protected SqlCrudCreatorExecption(
+            public SqlCrudCreatorException() { }
+            public SqlCrudCreatorException(string message) : base(message) { }
+            public SqlCrudCreatorException(string message, Exception inner) : base(message, inner) { }
+            protected SqlCrudCreatorException(
               System.Runtime.Serialization.SerializationInfo info,
               System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
         }

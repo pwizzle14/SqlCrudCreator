@@ -38,7 +38,7 @@ namespace SqlCrudCreatorCore.DAL
 
             catch (Exception ex)
             {
-                throw new SqlCrudCreatorExecption($"Error Fetching data from table {tableName}", ex);
+                throw new SqlCrudCreatorException($"Error Fetching data from table {tableName}", ex);
             }
         }
 
