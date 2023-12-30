@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GoldenvaleDAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b364001aa3a132a216eb3240f37ee6b24a461799")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("GoldenvaleDAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GoldenvaleDAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
