@@ -44,7 +44,6 @@ public class ClassGeneratorProperties
                     break;
 
                 case var decimalType when IntDBTypes.Contains(decimalType):
-                    tempRes.PropertyType = "double?";
                     tempRes.ObjectValue = "0";
                     break;
 
