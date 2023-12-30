@@ -1,0 +1,13 @@
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\bin\Debug\net8.0\GoldenvaleDAL.deps.json
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\bin\Debug\net8.0\GoldenvaleDAL.dll
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\bin\Debug\net8.0\GoldenvaleDAL.pdb
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.csproj.AssemblyReference.cache
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.AssemblyInfoInputs.cache
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.AssemblyInfo.cs
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.csproj.CoreCompileInputs.cache
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.sourcelink.json
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.dll
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\refint\GoldenvaleDAL.dll
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\GoldenvaleDAL.pdb
+C:\Users\ddavi\source\repos\SqlCrudCreator\GoldenvaleDAL\obj\Debug\net8.0\ref\GoldenvaleDAL.dll

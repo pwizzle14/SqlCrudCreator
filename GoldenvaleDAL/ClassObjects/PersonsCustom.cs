@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+Contains custom sproc names that return a record from the table Tables.
+The Persons.cs class can be re generated using SqlCrudCreator. 
+ */
 
 namespace GoldenvaleDAL.ClassObjects
 {

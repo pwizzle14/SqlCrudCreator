@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "up0NHOunkyWDTO3rcOUV35nLjQhaaoqdquRxL7BdqJBhEpPTwP+apqzktmy06TO3oL1hIXYSDRZEXaD5DbhddA==",
+  "dgSpecHash": "Grk0XMeJg5md4mgnyCETHLTDGTy/rR87ZM6BfB1a54GR2mcBPEruDHU5oLoGxFcPewVpTtRVl7qij8mPg3U9Sw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj",
+  "projectFilePath": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ddavi\\.nuget\\packages\\dapper\\2.1.24\\dapper.2.1.24.nupkg.sha512",
     "C:\\Users\\ddavi\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",

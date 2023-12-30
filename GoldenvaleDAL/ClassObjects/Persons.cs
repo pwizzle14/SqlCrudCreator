@@ -8,10 +8,14 @@
 		public string Address { get; set; }
 		public string City { get; set; }
 
+
+
 		public string GetPrimaryKey()
 		{
 			return "PersonID";
 		}
+
+
 		public string SprocNameCreate()
 		{
 			return "Persons_Create";

@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using Dapper;
+using GoldenvaleDAL.Utility;
 using static GoldenvaleDAL.Utilities;
 
 namespace GoldenvaleDAL.DataLayerWorker
@@ -15,6 +16,12 @@ namespace GoldenvaleDAL.DataLayerWorker
         {
             _sqlConnection = new SqlConnection(_connectionString);
         }
+
+        public DataLayerWorker(string connectionString)
+        {
+            _connectionString = connectionString;
+            _sqlConnection = new SqlConnection(connectionString);
+        }
           
 
         #region CRUD
@@ -27,15 +34,15 @@ namespace GoldenvaleDAL.DataLayerWorker
              
         }
 
-        public async Task DeleteById(int id, IDataLayerObj obj)
+        public async Task DeleteById<IDataLayerObj>(int id, IDataLayerObj obj)
         {
             await PreExecuteById<IDataLayerObj>(id, obj, SQL_FUNCTION_TYPE.DELETE);
             return; 
         }
 
-        public async Task<IDataLayerObj?> SelectById<IDataLayerObj>(int id, IDataLayerObj objType)
+        public async Task<IDataLayerObj?> SelectById<IDataLayerObj>(int id, IDataLayerObj obj)
         {
-            var results =  await PreExecuteById<IDataLayerObj>(id, objType, SQL_FUNCTION_TYPE.SELECT);
+            var results =  await PreExecuteById<IDataLayerObj>(id, obj, SQL_FUNCTION_TYPE.SELECT);
 
             return results.FirstOrDefault();
         }
@@ -83,7 +90,22 @@ namespace GoldenvaleDAL.DataLayerWorker
 
         private async Task<List<IDataLayerObj>> Execute<IDataLayerObj>(string sprocName, Dictionary<string, object> parms)
         {
-            return _sqlConnection.Query<IDataLayerObj>(sprocName, parms, commandType: CommandType.StoredProcedure).ToList(); 
+            try
+            {
+                if(_sqlConnection == null)
+                {
+                    throw new DALExecption($"Cannot perform database request because _sqlConnection is null");
+                }
+
+
+
+               return _sqlConnection.Query<IDataLayerObj>(sprocName, parms, commandType: CommandType.StoredProcedure).ToList(); 
+            }
+
+            catch (Exception ex)
+            {
+                throw new DALExecption($"Error in executing stored procedure {sprocName} with parms {parms}", ex);
+            }
         }
         #endregion
 
@@ -115,10 +137,12 @@ namespace GoldenvaleDAL.DataLayerWorker
 
         private Dictionary<string, object> GetPrimaryKeyAsParameter(string primaryKey, int id)
         {
-            var parm = new Dictionary<string, object>();
-            parm.Add($"@{primaryKey}", id);
+            var parms = new Dictionary<string, object>
+            {
+                { $"@{primaryKey}", id }
+            };
 
-            return parm;
+            return parms;
         }
 
         #endregion
