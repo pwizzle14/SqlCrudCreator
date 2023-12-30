@@ -111,7 +111,7 @@ namespace SqlCrudCreatorCore
             {
                 var colWidth = "";
 
-                if(ClassGenerator.StringDBTypes.Contains(col.DataTypeName))
+                if(ClassGeneratorProperties.StringDBTypes.Contains(col.DataTypeName))
                     colWidth = $"({col.ColumnSize})";
 
                 stb.Append($",@{col.ColumnName} {col.DataTypeName}{colWidth}{LINE_BREAK}");

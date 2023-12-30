@@ -1,15 +1,13 @@
 ﻿using SqlCrudCreatorCore.DAL;
+using SqlCrudCreatorCore.Utilities;
+using System.Runtime.CompilerServices;
+using System.Text;
 using static SqlCrudCreatorCore.DBTableHelper;
 
 namespace SqlCrudCreatorCore
 {
     internal class ClassGenerator
     {
-
-        public static string[] StringDBTypes = new string[] { "nvarchar", "varchar" };
-        public static string[] IntDBTypes = new string[] { "int" };
-        public static string[] DecimalDBTypes = new string[] { "decimal" };
-        public static string BoolDBType = "bit";
         public List<ClassGeneratorProperties> PropInfo;
 
         public string ClassName = string.Empty;
@@ -36,15 +34,41 @@ namespace SqlCrudCreatorCore
             PrimaryKey = pkData.ColumnName;
         }
 
+        public string CreateClassFromTemplate()
+        {
+            System.IO.StreamReader file = new StreamReader(@"../../../ClassObjectTemplate.txt");
+            string inputText = file.ReadToEnd();
+            
+            var replacers = new Dictionary<string, string>
+            {
+                { "{0}", _namespace },
+                { "{1}", ClassName },
+                { "{2}", GetPublicProperties() },
+                { "{3}", GetPrimaryKeyFunction() },
+                { "{4}", GetAllMethods() }
+            };
 
-        public string GetPublicProperties()
+            var parms = new TemplateFillerParms()
+            {
+                InputText = inputText,
+                Replacers = replacers
+            };
+
+            var res = TemplateFiller.FillClassObjectTemplate(parms);
+
+            return res; 
+            
+        }
+
+        private string GetPublicProperties()
         {
             string result = string.Empty;
 
             foreach (var prop in PropInfo)
             {
-                string res = $"{DOUBLETAB}public {prop.PropertyType} {prop.PropertyName} " +
-                            " { get; set; }\r\n";
+                string res = $"public {prop.PropertyType} {prop.PropertyName} " +
+                            " { get; set; }" + $"{Line_Break}" +
+                            $"{DOUBLETAB}";
 
 
                 result += res;
@@ -56,27 +80,14 @@ namespace SqlCrudCreatorCore
             return result;
         }
 
-        public string GetUsingStatements()
-        {
-            return 
-                   $"namespace {_namespace}{Line_Break}" +
-                   "{" +
-                   $"{Line_Break}{TAB}public partial class {ClassName}: IDataLayerObj{Line_Break}" +
-                   $"{TAB}" + "{" +
-                   $"{Line_Break}";
-
-
-                   
-        }
-
-        public string GetPrimaryKeyFunction(string primaryKey)
+        private string GetPrimaryKeyFunction()
         {
             string result = "";
 
-            result += $"{DOUBLETAB}public string GetPrimaryKey()" +
+            result += $"public string GetPrimaryKey()" +
                 $"{Line_Break}{DOUBLETAB}" + "{" + $"{Line_Break}" + 
                 
-                $"return \"{primaryKey}\";{Line_Break}{DOUBLETAB}" +
+                $"{DOUBLETAB}{TAB}return \"{PrimaryKey}\";{Line_Break}{DOUBLETAB}" +
                 "}" +
                 $"{Line_Break}{Line_Break}";
 
@@ -84,101 +95,54 @@ namespace SqlCrudCreatorCore
 
         }
 
-        public string GetSprocNames(SQL_FUNCTION_TYPE type)
+
+        private string GetAllMethods()
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(GetCreateMethod());
+            builder.Append(GetUpdateMethod());
+            builder.Append(GetDeleteMethod());
+            builder.Append(GetFetchByIdMethod());
+
+            return builder.ToString();
+        }
+
+        private string GetCreateMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Create);
+        }
+
+        private string GetUpdateMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Update);
+        }
+
+        private string GetDeleteMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Delete);
+        }
+
+        private string GetFetchByIdMethod()
+        {
+            return GetSprocNames(SQL_FUNCTION_TYPE.Fetch);
+        }
+        private string GetSprocNames(SQL_FUNCTION_TYPE type)
         {
             var result = string.Empty;
             var nameOfFunction = Enum.GetName(type);
 
-            result += $"{DOUBLETAB}public string SprocName{nameOfFunction}(){Line_Break}{DOUBLETAB}" +
+            result += $"public string SprocName{nameOfFunction}(){Line_Break}{DOUBLETAB}" +
                      "{" + $"{Line_Break}" +
                      $"{DOUBLETAB}{TAB} return \"{TableName}_{nameOfFunction}\";" +
                      $"{Line_Break}{DOUBLETAB}" +
                      "}" +
-                     $"{Line_Break}";
+                     $"{Line_Break}{DOUBLETAB}";
 
 
 
             return result;
         }
-
-        public string GetCreateMethod()
-        {
-            return GetSprocNames(SQL_FUNCTION_TYPE.Create);
-        }
-
-        public string GetUpdateMethod()
-        {
-            return GetSprocNames(SQL_FUNCTION_TYPE.Update);
-        }
-
-        public string GetDeleteMethod()
-        {
-            return GetSprocNames(SQL_FUNCTION_TYPE.Delete);
-        }
-
-        public string GetFetchByIdMethod()
-        {
-            return GetSprocNames(SQL_FUNCTION_TYPE.Fetch);
-        }
-
-        public string GetCloseClass()
-        {
-            return $"{Line_Break}{TAB}" +
-                    "}" +
-                    $"{Line_Break}" +
-                    "}";
-        }
-
-        public class ClassGeneratorProperties
-        {
-            public string PropertyName = "";
-            public string PropertyType = "";
-            public string ObjectValue = "";
-
-            public string PrivatePropertyName
-            {
-                get
-                {
-                    return $"_{PropertyName}";
-                }
-            }
-
-            public static List<ClassGeneratorProperties> ConvertProperites(List<DataTableProperties> tableData)
-            {
-                var result = new List<ClassGeneratorProperties>();
-
-                foreach (var col in tableData)
-                {
-                    var tempRes = new ClassGeneratorProperties();
-
-                    tempRes.PropertyName = col.ColumnName;
-
-                    if (StringDBTypes.Contains(col.DataTypeName.ToLower()))
-                    {
-                        tempRes.PropertyType = "string";
-                        tempRes.ObjectValue = "string.Empty";
-                    }
-                    else if (IntDBTypes.Contains(col.DataTypeName.ToLower()))
-                    {
-                        tempRes.PropertyType = "int";
-                        tempRes.ObjectValue = "0";
-                    }
-                    else if (col.DataTypeName.ToLower() == BoolDBType)
-                    {
-                        tempRes.PropertyType = "bool";
-                        tempRes.ObjectValue = "false";
-                    }
-                    else
-                    {
-                        tempRes.PropertyType = col.DataTypeName;
-                        tempRes.ObjectValue = "";
-                    }
-
-                    result.Add(tempRes);
-                }
-
-                return result;
-            }      
+            
         }
     }
-}

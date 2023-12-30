@@ -8,12 +8,12 @@ namespace SqlCrudCreatorCore.BL
     public class SqlCrudCreator : iSqlCrudCreator
     {
 
-        private IDatabaseService _databaseService = null;
+        private IDatabaseService? _databaseService = null;
 
         private string _tableName = "";
         private string _objectName = "";
         private string _className = "";
-        private List<DataTableProperties> _colData = null;
+        private List<DataTableProperties>? _colData = null;
         private SqlCrudCreatorResults _results = new SqlCrudCreatorResults();
 
 
@@ -51,20 +51,10 @@ namespace SqlCrudCreatorCore.BL
         {
             ClassGenerator gen = new ClassGenerator(_colData, _tableName, _className, _objectName);
 
-            StringBuilder result = new StringBuilder();
-
-            result.Append(gen.GetUsingStatements());
-            result.Append(gen.GetPublicProperties());
-            result.Append(gen.GetPrimaryKeyFunction(gen.PrimaryKey));
-            result.Append(gen.GetCreateMethod());
-            result.Append(gen.GetUpdateMethod());
-            result.Append(gen.GetDeleteMethod());
-            result.Append(gen.GetFetchByIdMethod());
-            result.Append(gen.GetCloseClass());
-
-
-            return result.ToString();
+            return gen.CreateClassFromTemplate();
         }
+
+       
 
         private string CreateSqlScripts()
         {
