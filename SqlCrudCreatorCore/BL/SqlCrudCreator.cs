@@ -43,7 +43,7 @@ namespace SqlCrudCreatorCore.BL
 
             catch(Exception ex)
             {
-                throw new SqlCrudCreatorExecption($"Fatal error!", ex);
+                throw new SqlCrudCreatorException($"Sql Crud Creator fatal error!", ex);
             }
         }
 
@@ -60,20 +60,18 @@ namespace SqlCrudCreatorCore.BL
         {
             StringBuilder sb = new StringBuilder();
           
-            var lstOfTemplates = new List<iTemplate>();
-
-            
-            lstOfTemplates.Add(new Select_Template(_colData, _tableName));
-            lstOfTemplates.Add(new Insert_Template(_colData, _tableName));
-            lstOfTemplates.Add(new Delete_Template(_colData, _tableName));
-            lstOfTemplates.Add(new Update_Template(_colData, _tableName));
+            var lstOfTemplates = new List<iTemplate>
+            {
+                new Select_Template(_colData, _tableName),
+                new Insert_Template(_colData, _tableName),
+                new Delete_Template(_colData, _tableName),
+                new Update_Template(_colData, _tableName)
+            };
 
 
             foreach (var template in lstOfTemplates)
             {
-                iTemplate temp = template;
-
-                sb.Append(temp.CreateSproc());
+                sb.Append(template.CreateSproc());
             }
 
             return sb.ToString();

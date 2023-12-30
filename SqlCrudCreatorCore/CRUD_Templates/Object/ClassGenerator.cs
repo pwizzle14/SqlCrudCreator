@@ -1,4 +1,5 @@
 ﻿using SqlCrudCreatorCore.DAL;
+using SqlCrudCreatorCore.Utilites;
 using SqlCrudCreatorCore.Utilities;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -36,10 +37,13 @@ namespace SqlCrudCreatorCore
 
         public string CreateClassFromTemplate()
         {
-            System.IO.StreamReader file = new StreamReader(@"../../../ClassObjectTemplate.txt");
-            string inputText = file.ReadToEnd();
-            
-            var replacers = new Dictionary<string, string>
+            try
+            {
+                System.IO.StreamReader file = new StreamReader(@"../../../ClassObjectTemplate.txt");
+
+                string inputText = file.ReadToEnd();
+
+                var replacers = new Dictionary<string, string>
             {
                 { "{0}", _namespace },
                 { "{1}", ClassName },
@@ -48,15 +52,21 @@ namespace SqlCrudCreatorCore
                 { "{4}", GetAllMethods() }
             };
 
-            var parms = new TemplateFillerParms()
+                var parms = new TemplateFillerParms()
+                {
+                    InputText = inputText,
+                    Replacers = replacers
+                };
+
+                var res = TemplateFiller.FillClassObjectTemplate(parms);
+
+                return res;
+            }
+
+            catch (Exception ex)
             {
-                InputText = inputText,
-                Replacers = replacers
-            };
-
-            var res = TemplateFiller.FillClassObjectTemplate(parms);
-
-            return res; 
+                throw new SqlCrudCreatorException("Error Creating Class Object", ex);
+            }
             
         }
 
