@@ -1,11 +1,11 @@
-﻿namespace GoldenvaleDAL.ClassObjects
+namespace GoldenvaleDAL.ClassObjects
 {
     public partial class TitanProcesserQueue : IDataLayerObj
     {
-        public int? TitanProcesserQueueID { get; set; }
-        public int? ServiceId { get; set; }
+        public int TitanProcesserQueueID { get; set; }
+        public int ServiceId { get; set; }
         public string? ServiceData { get; set; }
-        public int? ServiceStatusId { get; set; }
+        public int ServiceStatusId { get; set; }
         public DateTime? StartTimeUTC { get; set; }
         public DateTime? EndTimeUTC { get; set; }
         public string? ProcessingGUID { get; set; }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SQL_CRUD_CREATOR_TESTS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a3f9f873b9a8bdb27e87af29de29f7621deee621")]
 [assembly: System.Reflection.AssemblyProductAttribute("SQL_CRUD_CREATOR_TESTS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SQL_CRUD_CREATOR_TESTS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
