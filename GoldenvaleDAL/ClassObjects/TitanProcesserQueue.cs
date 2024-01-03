@@ -1,4 +1,4 @@
-﻿namespace GoldenvaleDAL.ClassObjects
+namespace GoldenvaleDAL.ClassObjects
 {
     public partial class TitanProcesserQueue : IDataLayerObj
     {
@@ -32,7 +32,7 @@
         }
         public string SprocNameFetch()
         {
-            return "TitanProcesserQueue_Select";
+            return "TitanProcesserQueue_Fetch";
         }
 
     }

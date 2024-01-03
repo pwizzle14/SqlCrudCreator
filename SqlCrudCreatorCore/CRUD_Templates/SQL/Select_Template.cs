@@ -44,7 +44,7 @@ namespace SqlCrudCreatorCore
 
 		public string GetSprocName(string tableName)
         {
-			return $"{tableName}_Select";
+			return $"{tableName}_Fetch";
 		}
     }
 }

@@ -1,4 +1,4 @@
-﻿using SqlCrudCreatorCore.DAL;
+using SqlCrudCreatorCore.DAL;
 
 public class ClassGeneratorProperties
 {
@@ -6,6 +6,7 @@ public class ClassGeneratorProperties
     public static readonly string[] IntDBTypes = ["int"];
     public static readonly string[] DecimalDBTypes = ["decimal"];
     public static readonly string BoolDBType = "bit";
+    public static readonly string DateTimeDBType = "datetime";
 
 
     public string PropertyName = "";
@@ -38,17 +39,16 @@ public class ClassGeneratorProperties
             switch (col.DataTypeName.ToLower())
             {
                 case var strType when StringDBTypes.Contains(strType):
-                    tempRes.PropertyType = "string";
+                    tempRes.PropertyType = "string?";
                     tempRes.ObjectValue = "string.Empty";
                     break;
 
                 case var intType when IntDBTypes.Contains(intType):
-                    tempRes.PropertyType = "int";
+                    tempRes.PropertyType = "int?";
                     tempRes.ObjectValue = "0";
                     break;
 
                 case var decimalType when IntDBTypes.Contains(decimalType):
-                    tempRes.PropertyType = "double";
                     tempRes.ObjectValue = "0";
                     break;
 
