@@ -41,7 +41,7 @@ namespace SqlCrudCreatorCore.Services
 
             catch (Exception ex)
             {
-                throw new SqlCrudCreatorExecption($"Error when creating file {_filePath}", ex);
+                throw new SqlCrudCreatorException($"Error when creating file {_filePath}", ex);
             }
         }
     }

@@ -23,13 +23,13 @@ namespace SQL_CRUD_CREATOR_TESTS
         public void CreateAllClassAndScriptsTest()
         {
             //arrange
-            IDatabaseService service = new DatabaseService();
+            IDatabaseService service = new FakeDataService();
 
 
             var crud = new SqlCrudCreator();
 
             //act
-            var res = crud.CreateAllClassObjAndSQL(service, "Persons", "Persons", "Persons");
+            var res = crud.CreateAllClassObjAndSQL(service, "TitanProcesserQueue", "TitanProcesserQueue", "TitanProcesserQueue");
            
             //Assert
             Assert.IsNotNull(res.SqlQuries);

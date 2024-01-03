@@ -26,7 +26,7 @@ namespace SQL_CRUD_CREATOR_TESTS.Services
 
             var col2 = new DataTableProperties() //Name
             {
-                AllowDBNull = false,
+                AllowDBNull = true,
                 IsIdentity = false,
                 ColumnName = "Name",
                 DataType = "System.String, System.Private.CoreLib, Version=6.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",

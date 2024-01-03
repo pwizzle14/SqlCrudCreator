@@ -4,14 +4,14 @@
     "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SQL_CRUD_CREATOR_TESTS\\SQL_CRUD_CREATOR_TESTS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj": {
+    "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj",
+        "projectUniqueName": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj",
         "projectName": "GoldenvaleDAL",
-        "projectPath": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj",
+        "projectPath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\GoldenvaleDAL\\GoldenvaleDAL.csproj",
         "packagesPath": "C:\\Users\\ddavi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\GoldenvaleDAL\\obj\\",
+        "outputPath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\GoldenvaleDAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -78,14 +78,14 @@
         }
       }
     },
-    "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj": {
+    "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
+        "projectUniqueName": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
         "projectName": "SqlCrudCreatorCore",
-        "projectPath": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
+        "projectPath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\SqlCrudCreatorCore.csproj",
         "packagesPath": "C:\\Users\\ddavi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ddavi\\Source\\Repos\\SqlCrudCreator\\SqlCrudCreatorCore\\obj\\",
+        "outputPath": "C:\\Users\\ddavi\\source\\repos\\SqlCrudCreator\\SqlCrudCreatorCore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

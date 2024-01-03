@@ -11,6 +11,7 @@ public class ClassGeneratorProperties
     public string PropertyName = "";
     public string PropertyType = "";
     public string ObjectValue = "";
+    public string NullableChar = "";
 
     public string PrivatePropertyName
     {
@@ -29,6 +30,10 @@ public class ClassGeneratorProperties
             var tempRes = new ClassGeneratorProperties();
 
             tempRes.PropertyName = col.ColumnName;
+
+            if(col.AllowDBNull)
+                tempRes.NullableChar = "?";
+            
 
             switch (col.DataTypeName.ToLower())
             {
@@ -52,12 +57,19 @@ public class ClassGeneratorProperties
                     tempRes.ObjectValue = "false";
                     break;
 
+                case var datetimeType when DateTimeDBType.Contains(datetimeType):
+                    tempRes.PropertyType = "DateTime";
+                    tempRes.ObjectValue = null;
+                    break;
+
                 default:
                     tempRes.PropertyType = col.DataTypeName;
                     tempRes.ObjectValue = null;
                     break;
             }
 
+
+            tempRes.PropertyType += tempRes.NullableChar;
 
             result.Add(tempRes);
         }
